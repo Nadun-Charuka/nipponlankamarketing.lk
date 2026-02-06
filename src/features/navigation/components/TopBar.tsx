@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { FiPhone, FiMapPin, FiUser, FiShoppingCart } from 'react-icons/fi';
+import { FiPhone, FiMapPin, FiUser } from 'react-icons/fi';
 
 export function TopBar() {
     return (
@@ -25,28 +25,14 @@ export function TopBar() {
                         </div>
                     </div>
 
-                    {/* Right: Account & Cart */}
-                    <div className="flex items-center gap-4">
-                        <Link
-                            href="/admin/login"
-                            className="flex items-center gap-2 hover:text-primary-200 transition-colors"
-                        >
-                            <FiUser className="w-4 h-4" />
-                            <span className="hidden sm:inline">Login / Admin</span>
-                        </Link>
-
-                        <Link
-                            href="/cart"
-                            className="flex items-center gap-2 hover:text-primary-200 transition-colors relative"
-                        >
-                            <FiShoppingCart className="w-4 h-4" />
-                            <span className="hidden sm:inline">Cart</span>
-                            {/* Cart badge - will be dynamic later */}
-                            <span className="absolute -top-1 -right-1 bg-accent-gold text-white text-xs w-4 h-4 rounded-full flex items-center justify-center">
-                                0
-                            </span>
-                        </Link>
-                    </div>
+                    {/* Right: Admin Login Only */}
+                    <Link
+                        href="/admin/login"
+                        className="flex items-center gap-2 hover:text-primary-200 transition-colors"
+                    >
+                        <FiUser className="w-4 h-4" />
+                        <span className="hidden sm:inline">Login / Admin</span>
+                    </Link>
                 </div>
             </div>
         </div>
