@@ -50,138 +50,155 @@ const filters = [
     },
 ];
 
-export function ProductFilters({ mobileFiltersOpen, setMobileFiltersOpen }: ProductFiltersProps) {
+export function ProductFilters({ mobileFiltersOpen, setMobileFiltersOpen, mode = 'both' }: ProductFiltersProps & { mode?: 'mobile' | 'desktop' | 'both' }) {
     return (
         <>
             {/* Mobile filter dialog */}
-            <Transition.Root show={mobileFiltersOpen} as="div">
-                <Dialog as="div" className="relative z-40 lg:hidden" onClose={setMobileFiltersOpen}>
-                    <Transition.Child
-                        as="div"
-                        enter="transition-opacity ease-linear duration-300"
-                        enterFrom="opacity-0"
-                        enterTo="opacity-100"
-                        leave="transition-opacity ease-linear duration-300"
-                        leaveFrom="opacity-100"
-                        leaveTo="opacity-0"
-                    >
-                        <div className="fixed inset-0 bg-black/25" />
-                    </Transition.Child>
-
-                    <div className="fixed inset-0 z-40 flex">
+            {/* Mobile filter dialog (Bottom Sheet) */}
+            {(mode === 'mobile' || mode === 'both') && (
+                <Transition.Root show={mobileFiltersOpen} as="div">
+                    <Dialog as="div" className="relative z-[100] lg:hidden" onClose={setMobileFiltersOpen}>
                         <Transition.Child
                             as="div"
-                            enter="transition ease-in-out duration-300 transform"
-                            enterFrom="translate-x-full"
-                            enterTo="translate-x-0"
-                            leave="transition ease-in-out duration-300 transform"
-                            leaveFrom="translate-x-0"
-                            leaveTo="translate-x-full"
+                            enter="transition-opacity ease-linear duration-300"
+                            enterFrom="opacity-0"
+                            enterTo="opacity-100"
+                            leave="transition-opacity ease-linear duration-300"
+                            leaveFrom="opacity-100"
+                            leaveTo="opacity-0"
                         >
-                            <Dialog.Panel className="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl">
-                                <div className="flex items-center justify-between px-4">
-                                    <h2 className="text-lg font-medium text-gray-900">Filters</h2>
-                                    <button
-                                        type="button"
-                                        className="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400"
-                                        onClick={() => setMobileFiltersOpen(false)}
-                                    >
-                                        <span className="sr-only">Close menu</span>
-                                        <FiX className="h-6 w-6" aria-hidden="true" />
-                                    </button>
-                                </div>
+                            <div className="fixed inset-0 bg-black/40 backdrop-blur-sm" />
+                        </Transition.Child>
 
-                                {/* Mobile Filters */}
-                                <form className="mt-4 border-t border-gray-200">
-                                    {filters.map((section) => (
-                                        <Disclosure as="div" key={section.id} className="border-t border-gray-200 px-4 py-6">
-                                            {({ open }) => (
-                                                <>
-                                                    <h3 className="-mx-2 -my-3 flow-root">
-                                                        <Disclosure.Button className="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500">
-                                                            <span className="font-medium text-gray-900">{section.name}</span>
-                                                            <span className="ml-6 flex items-center">
-                                                                {open ? (
-                                                                    <FiMinus className="h-5 w-5" aria-hidden="true" />
-                                                                ) : (
-                                                                    <FiPlus className="h-5 w-5" aria-hidden="true" />
-                                                                )}
-                                                            </span>
-                                                        </Disclosure.Button>
+                        <div className="fixed inset-0 z-[100] flex items-end justify-center sm:items-center">
+                            <Transition.Child
+                                as="div"
+                                enter="transition ease-in-out duration-300 transform"
+                                enterFrom="translate-y-full"
+                                enterTo="translate-y-0"
+                                leave="transition ease-in-out duration-300 transform"
+                                leaveFrom="translate-y-0"
+                                leaveTo="translate-y-full"
+                                className="w-full sm:max-w-md"
+                            >
+                                <Dialog.Panel className="relative w-full flex flex-col max-h-[90vh] overflow-hidden bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl">
+                                    {/* Handle Bar */}
+                                    <div className="h-1.5 w-12 bg-gray-300 rounded-full mx-auto mt-3 mb-1 sm:hidden" />
+
+                                    {/* Header */}
+                                    <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+                                        <h2 className="text-xl font-display font-semibold text-gray-900">Filters</h2>
+                                        <button
+                                            type="button"
+                                            className="p-2 -mr-2 text-gray-400 hover:text-gray-500 rounded-full hover:bg-gray-100 transition-colors"
+                                            onClick={() => setMobileFiltersOpen(false)}
+                                        >
+                                            <FiX className="h-6 w-6" />
+                                        </button>
+                                    </div>
+
+                                    {/* Scrollable Content */}
+                                    <div className="flex-1 overflow-y-auto px-6 py-4">
+                                        <form className="space-y-6">
+                                            {filters.map((section) => (
+                                                <div key={section.id} className="border-b border-gray-100 pb-6 last:border-0 last:pb-0">
+                                                    <h3 className="text-sm font-medium text-gray-900 mb-4 uppercase tracking-wider">
+                                                        {section.name}
                                                     </h3>
-                                                    <Disclosure.Panel className="pt-6">
-                                                        <div className="space-y-6">
-                                                            {section.type === 'range' ? (
-                                                                <PriceRangeInputs />
-                                                            ) : (
-                                                                section.options.map((option, optionIdx) => (
-                                                                    <div key={option.value} className="flex items-center">
+
+                                                    {section.type === 'range' ? (
+                                                        <PriceRangeInputs />
+                                                    ) : (
+                                                        <div className="space-y-3">
+                                                            {section.options.map((option, optionIdx) => (
+                                                                <div key={option.value} className="flex items-center group">
+                                                                    <div className="relative flex items-center">
                                                                         <input
                                                                             id={`filter-mobile-${section.id}-${optionIdx}`}
                                                                             name={`${section.id}[]`}
                                                                             defaultValue={option.value}
                                                                             type="checkbox"
                                                                             defaultChecked={option.checked}
-                                                                            className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                                                                            className="h-5 w-5 rounded border-gray-300 text-primary-600 focus:ring-primary-500 cursor-pointer"
                                                                         />
-                                                                        <label
-                                                                            htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
-                                                                            className="ml-3 min-w-0 flex-1 text-gray-500"
-                                                                        >
-                                                                            {option.label}
-                                                                        </label>
                                                                     </div>
-                                                                ))
-                                                            )}
+                                                                    <label
+                                                                        htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
+                                                                        className="ml-3 text-base text-gray-600 group-hover:text-gray-900 cursor-pointer select-none"
+                                                                    >
+                                                                        {option.label}
+                                                                    </label>
+                                                                </div>
+                                                            ))}
                                                         </div>
-                                                    </Disclosure.Panel>
-                                                </>
-                                            )}
-                                        </Disclosure>
-                                    ))}
-                                </form>
-                            </Dialog.Panel>
-                        </Transition.Child>
-                    </div>
-                </Dialog>
-            </Transition.Root>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </form>
+                                    </div>
+
+                                    {/* Sticky Footer */}
+                                    <div className="border-t border-gray-100 px-6 py-4 bg-gray-50 flex gap-4">
+                                        <button
+                                            type="button"
+                                            className="flex-1 px-4 py-3 text-sm font-semibold text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors"
+                                            onClick={() => setMobileFiltersOpen(false)}
+                                        >
+                                            Reset
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className="flex-[2] px-4 py-3 text-sm font-semibold text-white bg-primary-600 rounded-xl hover:bg-primary-700 transition-colors shadow-lg shadow-primary-500/30"
+                                            onClick={() => setMobileFiltersOpen(false)}
+                                        >
+                                            Show Results
+                                        </button>
+                                    </div>
+                                </Dialog.Panel>
+                            </Transition.Child>
+                        </div>
+                    </Dialog>
+                </Transition.Root>
+            )}
 
             {/* Desktop Filters */}
-            <div className="hidden lg:block">
-                <form className="space-y-10 divide-y divide-gray-200">
-                    {filters.map((section, sectionIdx) => (
-                        <div key={section.id} className={sectionIdx === 0 ? '' : 'pt-10'}>
-                            <fieldset>
-                                <legend className="block text-sm font-medium text-gray-900">{section.name}</legend>
-                                <div className="space-y-3 pt-6">
-                                    {section.type === 'range' ? (
-                                        <PriceRangeInputs />
-                                    ) : (
-                                        section.options.map((option, optionIdx) => (
-                                            <div key={option.value} className="flex items-center">
-                                                <input
-                                                    id={`filter-${section.id}-${optionIdx}`}
-                                                    name={`${section.id}[]`}
-                                                    defaultValue={option.value}
-                                                    type="checkbox"
-                                                    defaultChecked={option.checked}
-                                                    className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
-                                                />
-                                                <label
-                                                    htmlFor={`filter-${section.id}-${optionIdx}`}
-                                                    className="ml-3 text-sm text-gray-600"
-                                                >
-                                                    {option.label}
-                                                </label>
-                                            </div>
-                                        ))
-                                    )}
-                                </div>
-                            </fieldset>
-                        </div>
-                    ))}
-                </form>
-            </div>
+            {(mode === 'desktop' || mode === 'both') && (
+                <div className="hidden lg:block">
+                    <form className="space-y-10 divide-y divide-gray-200">
+                        {filters.map((section, sectionIdx) => (
+                            <div key={section.id} className={sectionIdx === 0 ? '' : 'pt-10'}>
+                                <fieldset>
+                                    <legend className="block text-sm font-medium text-gray-900">{section.name}</legend>
+                                    <div className="space-y-3 pt-6">
+                                        {section.type === 'range' ? (
+                                            <PriceRangeInputs />
+                                        ) : (
+                                            section.options.map((option, optionIdx) => (
+                                                <div key={option.value} className="flex items-center">
+                                                    <input
+                                                        id={`filter-${section.id}-${optionIdx}`}
+                                                        name={`${section.id}[]`}
+                                                        defaultValue={option.value}
+                                                        type="checkbox"
+                                                        defaultChecked={option.checked}
+                                                        className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                                                    />
+                                                    <label
+                                                        htmlFor={`filter-${section.id}-${optionIdx}`}
+                                                        className="ml-3 text-sm text-gray-600"
+                                                    >
+                                                        {option.label}
+                                                    </label>
+                                                </div>
+                                            ))
+                                        )}
+                                    </div>
+                                </fieldset>
+                            </div>
+                        ))}
+                    </form>
+                </div>
+            )}
         </>
     );
 }

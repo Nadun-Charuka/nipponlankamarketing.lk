@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { FiFilter } from 'react-icons/fi';
 import toast from 'react-hot-toast';
-import { ProductFilters, ProductSort, ProductCard, QuickViewModal } from '@/features/catalog/components';
+import { ProductFilters, ProductSort, ProductCard, ProductCardMobile, QuickViewModal } from '@/features/catalog/components';
 import { Product } from '@/shared/types/database';
 
 // Sample products for demonstration
@@ -152,27 +152,44 @@ export default function ProductsPage() {
         <div className="bg-white">
             <div>
                 {/* Mobile filter dialog */}
+                {/* Mobile filter dialog */}
                 <ProductFilters
                     mobileFiltersOpen={mobileFiltersOpen}
                     setMobileFiltersOpen={setMobileFiltersOpen}
+                    mode="mobile"
                 />
 
                 <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
+                    {/* Desktop Header */}
+                    <div className="hidden lg:flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
                         <h1 className="text-4xl font-display font-bold tracking-tight text-gray-900">
                             All Products
                         </h1>
 
                         <div className="flex items-center">
                             <ProductSort />
+                        </div>
+                    </div>
+
+                    {/* Mobile Header & Sticky Bar */}
+                    <div className="lg:hidden pt-4 pb-4">
+                        <h1 className="text-2xl font-display font-bold tracking-tight text-gray-900 mb-4 px-2">
+                            All Products
+                        </h1>
+
+                        {/* Sticky Toolbar */}
+                        <div className="sticky top-[60px] z-20 bg-white/95 backdrop-blur-sm border-y border-gray-100 mx-[-16px] px-4 py-3 flex items-center justify-between gap-4 shadow-sm">
                             <button
                                 type="button"
-                                className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
+                                className="flex-1 flex items-center justify-center gap-2 text-sm font-medium text-gray-700 bg-gray-50 py-2.5 rounded-lg border border-gray-200"
                                 onClick={() => setMobileFiltersOpen(true)}
                             >
-                                <span className="sr-only">Filters</span>
-                                <FiFilter className="h-5 w-5" aria-hidden="true" />
+                                <FiFilter className="h-4 w-4" />
+                                Filter
                             </button>
+                            <div className="flex-1 min-w-0">
+                                <ProductSort />
+                            </div>
                         </div>
                     </div>
 
@@ -182,17 +199,30 @@ export default function ProductsPage() {
                         </h2>
 
                         <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
-                            {/* Filters */}
+                            {/* Desktop Sidebar Filters */}
                             <div className="hidden lg:block">
                                 <ProductFilters
                                     mobileFiltersOpen={false}
                                     setMobileFiltersOpen={() => { }}
+                                    mode="desktop"
                                 />
                             </div>
 
                             {/* Product grid */}
                             <div className="lg:col-span-3">
-                                <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
+                                {/* Mobile Grid (2 columns) */}
+                                <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:hidden">
+                                    {sampleProducts.map((product) => (
+                                        <ProductCardMobile
+                                            key={product.id}
+                                            product={product}
+                                            onAddToWishlist={handleAddToWishlist}
+                                        />
+                                    ))}
+                                </div>
+
+                                {/* Desktop Grid (3 columns) */}
+                                <div className="hidden lg:grid grid-cols-3 xl:gap-8 gap-y-10">
                                     {sampleProducts.map((product) => (
                                         <ProductCard
                                             key={product.id}

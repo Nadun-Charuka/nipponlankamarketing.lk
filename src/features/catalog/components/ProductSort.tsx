@@ -16,14 +16,14 @@ export function ProductSort() {
     const [selected, setSelected] = useState(sortOptions[0]);
 
     return (
-        <div className="w-56">
+        <div className="w-full lg:w-56">
             <Listbox value={selected} onChange={setSelected}>
                 <div className="relative mt-1">
-                    <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus:visible:border-indigo-500 focus:visible:ring-2 focus:visible:ring-white/75 focus:visible:ring-offset-2 focus:visible:ring-offset-orange-300 sm:text-sm border border-gray-200">
-                        <span className="block truncate">{selected.name}</span>
+                    <Listbox.Button className="relative w-full cursor-default rounded-lg bg-gray-50 lg:bg-white py-2.5 lg:py-2 pl-3 pr-10 text-left shadow-sm lg:shadow-md focus:outline-none focus:visible:border-indigo-500 focus:visible:ring-2 focus:visible:ring-white/75 sm:text-sm border border-gray-200">
+                        <span className="block truncate text-sm font-medium text-gray-700">{selected.name}</span>
                         <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                             <FiChevronDown
-                                className="h-5 w-5 text-gray-400"
+                                className="h-4 w-4 lg:h-5 lg:w-5 text-gray-500"
                                 aria-hidden="true"
                             />
                         </span>
