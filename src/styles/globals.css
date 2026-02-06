@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
+  
+
+  
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+@layer components {
+  /* Glassmorphism utility */
+  .glass {
+    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-glass;
+  }
+  
+  .glass-strong {
+    @apply bg-white/80 backdrop-blur-lg border border-white/30 shadow-glass-lg;
+  }
+  
+  /* Price badge styles */
+  .price-badge {
+    @apply inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold;
+  }
+  
+  .price-badge-cash {
+    @apply price-badge bg-primary-100 text-primary-700;
+  }
+  
+  .price-badge-installment {
+    @apply price-badge bg-accent-lavender text-primary-800;
+  }
+  
+  /* Button variants */
+  .btn-primary {
+    @apply bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg;
+  }
+  
+  .btn-secondary {
+    @apply bg-white hover:bg-primary-50 text-primary-700 font-semibold py-3 px-6 rounded-lg border-2 border-primary-200 transition-all duration-200;
+  }
+  
+  /* Card styles */
+  .card {
+    @apply bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-xl;
+  }
+  
+  .card-glass {
+    @apply glass rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-glass-lg;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
