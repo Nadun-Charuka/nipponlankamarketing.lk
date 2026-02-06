@@ -3,24 +3,24 @@ import { FiCreditCard, FiTruck, FiShield } from 'react-icons/fi';
 const banners = [
     {
         id: 1,
-        title: '20% C A S H__D I S C O U N T',
-        subtitle: 'ON_ALL_ITEMS',
+        title: '20% CASH DISCOUNT',
+        subtitle: 'ON ALL ITEMS',
         icon: <FiCreditCard className="w-8 h-8 md:w-10 md:h-10 text-white" />,
         color: 'from-accent-red to-orange-600',
         description: 'Get flat 20% off when you pay with cash on delivery or bank transfer.',
     },
     {
         id: 2,
-        title: 'F R E E__D E L I V E R Y',
-        subtitle: 'W E S T E R N__P R O V I N C E',
+        title: 'FREE DELIVERY',
+        subtitle: 'WESTERN PROVINCE',
         icon: <FiTruck className="w-8 h-8 md:w-10 md:h-10 text-white" />,
         color: 'from-primary-600 to-indigo-600',
         description: 'Free doorstep delivery for all orders within Colombo, Gampaha & Kalutara.',
     },
     {
         id: 3,
-        title: '1 Y E A R__W A R R A N T Y',
-        subtitle: 'O F F I C I A L__A G E N T',
+        title: '1 YEAR WARRANTY',
+        subtitle: 'OFFICIAL AGENT',
         icon: <FiShield className="w-8 h-8 md:w-10 md:h-10 text-white" />,
         color: 'from-accent-green to-emerald-600',
         description: 'Comprehensive warranty coverage on all electronics and appliances.',
@@ -46,11 +46,11 @@ export function PromoBanners() {
                                     {banner.icon}
                                 </div>
 
-                                <h3 className="text-xl md:text-2xl font-bold text-white mb-1 uppercase tracking-wide">
-                                    {banner.title.replace(/__/g, ' ')}
+                                <h3 className="text-xl md:text-2xl font-bold text-white mb-1 uppercase tracking-wider">
+                                    {banner.title}
                                 </h3>
                                 <p className="text-white/80 font-medium text-sm md:text-base mb-4 uppercase tracking-widest">
-                                    {banner.subtitle.replace(/__/g, ' ')}
+                                    {banner.subtitle}
                                 </p>
 
                                 <p className="text-white/90 text-sm leading-relaxed mt-auto">

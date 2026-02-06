@@ -119,7 +119,6 @@ export function CategoryGrid() {
                     ))}
                 </div>
 
-                {/* View All Link */}
                 <div className="text-center mt-12">
                     <Link
                         href="/categories"

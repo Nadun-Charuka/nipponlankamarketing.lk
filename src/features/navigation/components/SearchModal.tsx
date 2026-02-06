@@ -4,6 +4,7 @@ import { Fragment, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Dialog, Transition } from '@headlessui/react';
 import { FiX, FiSearch } from 'react-icons/fi';
+import { allProducts } from '@/shared/data/products';
 
 interface SearchModalProps {
     isOpen: boolean;
@@ -14,26 +15,23 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState<any[]>([]);
 
-    // Mock search - will be replaced with real search later
     const handleSearch = (query: string) => {
         setSearchQuery(query);
 
-        // Simulate search results
-        if (query.length > 2) {
-            setSearchResults([
-                {
-                    id: '1',
-                    name: 'Samsung 55" 4K Smart TV',
-                    price: 250000,
-                    image: '/products/samsung-tv.jpg',
-                },
-                {
-                    id: '2',
-                    name: 'LG 420L Refrigerator',
-                    price: 180000,
-                    image: '/products/lg-fridge.jpg',
-                },
-            ]);
+        if (query.length > 1) {
+            const lowerQuery = query.toLowerCase();
+            const results = allProducts.filter(p =>
+                p.name.toLowerCase().includes(lowerQuery) ||
+                (p.category_id && p.category_id.toLowerCase().includes(lowerQuery))
+            ).slice(0, 5); // Limit to 5 results for preview
+
+            setSearchResults(results.map(p => ({
+                id: p.id,
+                name: p.name,
+                price: p.cash_price, // Use cash price for display
+                image: p.featured_image,
+                slug: p.slug
+            })));
         } else {
             setSearchResults([]);
         }
@@ -82,7 +80,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                                         <FiSearch className="w-6 h-6 text-gray-400" />
                                         <input
                                             type="text"
-                                            placeholder="Search for products..."
+                                            placeholder="Search for products (e.g. 'Sony', 'Fridge')..."
                                             value={searchQuery}
                                             onChange={(e) => handleSearch(e.target.value)}
                                             className="flex-1 text-lg outline-none placeholder:text-gray-400"
@@ -109,7 +107,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                                             <div className="mt-6 text-left">
                                                 <p className="text-sm font-semibold text-gray-700 mb-3">Popular Searches</p>
                                                 <div className="flex flex-wrap gap-2">
-                                                    {['Samsung TV', 'LG Refrigerator', 'Washing Machine', 'Air Conditioner'].map((term) => (
+                                                    {['Samsung', 'LG Refrigerator', 'Washing Machine', 'Inverter AC'].map((term) => (
                                                         <button
                                                             key={term}
                                                             onClick={() => handleSearch(term)}
@@ -134,24 +132,33 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                                             {searchResults.map((product) => (
                                                 <Link
                                                     key={product.id}
-                                                    href={`/products/${product.id}`}
+                                                    href={`/products/${product.slug || product.id}`}
                                                     onClick={onClose}
-                                                    className="flex items-center gap-4 p-3 hover:bg-gray-50 rounded-lg transition-colors"
+                                                    className="flex items-center gap-4 p-3 hover:bg-gray-50 rounded-lg transition-colors group"
                                                 >
-                                                    <div className="w-16 h-16 bg-gray-200 rounded-lg flex-shrink-0" />
+                                                    <div className="w-16 h-16 bg-gray-100 rounded-lg flex-shrink-0 relative overflow-hidden">
+                                                        {/* Placeholder image logic since we're using strings */}
+                                                        {/* <Image src={product.image} fill className="object-contain" /> */}
+                                                        <div className="w-full h-full flex items-center justify-center text-2xl">📦</div>
+                                                    </div>
                                                     <div className="flex-1">
-                                                        <h3 className="font-medium text-gray-900">{product.name}</h3>
-                                                        <p className="text-sm text-primary-600 font-semibold">
-                                                            Rs. {product.price.toLocaleString()}
-                                                        </p>
+                                                        <h3 className="font-medium text-gray-900 group-hover:text-primary-600 transition-colors">{product.name}</h3>
+                                                        <div className="flex items-center gap-2 mt-1">
+                                                            <span className="text-sm text-primary-600 font-bold">
+                                                                Rs. {product.price.toLocaleString()}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="text-gray-400 group-hover:translate-x-1 transition-transform">
+                                                        →
                                                     </div>
                                                 </Link>
                                             ))}
 
                                             <Link
-                                                href={`/search?q=${searchQuery}`}
+                                                href={`/products?search=${encodeURIComponent(searchQuery)}`}
                                                 onClick={onClose}
-                                                className="block p-3 text-center text-primary-600 hover:bg-primary-50 rounded-lg font-medium transition-colors"
+                                                className="block p-4 mt-2 text-center text-primary-600 bg-primary-50 hover:bg-primary-100 rounded-xl font-semibold transition-colors"
                                             >
                                                 View all results for "{searchQuery}"
                                             </Link>

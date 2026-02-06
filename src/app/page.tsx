@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { HeroSlider, CategoryGrid } from '@/features/hero/components';
+import { HeroSlider } from '@/features/hero/components';
 import { ProductCarousel, QuickViewModal } from '@/features/catalog/components';
 import { PromoBanners, BrandShowcase, Testimonials, Newsletter } from '@/features/marketing/components';
 import { WhatsAppFAB } from '@/features/whatsapp/components/WhatsAppFAB';
@@ -134,8 +134,7 @@ export default function HomePage() {
         {/* Hero Slider */}
         <HeroSlider />
 
-        {/* Category Grid */}
-        <CategoryGrid />
+
 
         {/* Promotional Banners */}
         <PromoBanners />
