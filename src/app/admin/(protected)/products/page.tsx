@@ -10,7 +10,10 @@ import toast from 'react-hot-toast';
 
 export default function AdminProductsPage() {
     const [searchQuery, setSearchQuery] = useState('');
+    const [categoryFilter, setCategoryFilter] = useState('');
+    const [statusFilter, setStatusFilter] = useState('');
     const [products, setProducts] = useState<Product[]>([]);
+    const [categories, setCategories] = useState<Array<{ id: string; name: string }>>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     const fetchProducts = async () => {
@@ -29,8 +32,22 @@ export default function AdminProductsPage() {
         setIsLoading(false);
     };
 
+    const fetchCategories = async () => {
+        const { data, error } = await supabase
+            .from('categories')
+            .select('id, name')
+            .order('name');
+
+        if (error) {
+            console.error('Error fetching categories:', error);
+        } else {
+            setCategories(data || []);
+        }
+    };
+
     useEffect(() => {
         fetchProducts();
+        fetchCategories();
     }, []);
 
     const handleDelete = async (id: string) => {
@@ -49,11 +66,16 @@ export default function AdminProductsPage() {
         }
     };
 
-    const filteredProducts = products.filter(p =>
-        p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.sku?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (p.category_id && p.category_id.toLowerCase().includes(searchQuery.toLowerCase()))
-    );
+    const filteredProducts = products.filter(p => {
+        const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            p.sku?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (p.category_id && p.category_id.toLowerCase().includes(searchQuery.toLowerCase()));
+
+        const matchesCategory = !categoryFilter || p.category_id === categoryFilter;
+        const matchesStatus = !statusFilter || p.stock_status === statusFilter;
+
+        return matchesSearch && matchesCategory && matchesStatus;
+    });
 
     return (
         <div>
@@ -92,15 +114,25 @@ export default function AdminProductsPage() {
                     />
                 </div>
                 <div className="flex gap-3">
-                    <select className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-lg">
-                        <option>All Categories</option>
-                        <option>Televisions</option>
-                        <option>Refrigerators</option>
+                    <select
+                        className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-lg"
+                        value={categoryFilter}
+                        onChange={(e) => setCategoryFilter(e.target.value)}
+                    >
+                        <option value="">All Categories</option>
+                        {categories.map(cat => (
+                            <option key={cat.id} value={cat.id}>{cat.name}</option>
+                        ))}
                     </select>
-                    <select className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-lg">
-                        <option>All Status</option>
-                        <option>In Stock</option>
-                        <option>Out of Stock</option>
+                    <select
+                        className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-lg"
+                        value={statusFilter}
+                        onChange={(e) => setStatusFilter(e.target.value)}
+                    >
+                        <option value="">All Status</option>
+                        <option value="in_stock">In Stock</option>
+                        <option value="out_of_stock">Out of Stock</option>
+                        <option value="pre_order">Pre Order</option>
                     </select>
                 </div>
             </div>

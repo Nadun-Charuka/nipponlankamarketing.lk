@@ -2,12 +2,13 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { FiHome, FiBox, FiShoppingBag, FiSettings, FiUsers, FiLogOut } from 'react-icons/fi';
+import { FiHome, FiBox, FiShoppingBag, FiSettings, FiUsers, FiLogOut, FiGrid } from 'react-icons/fi';
 import { useAdminAuth } from '../hooks/useAdminAuth';
 
 const navigation = [
     { name: 'Dashboard', href: '/admin', icon: FiHome },
     { name: 'Products', href: '/admin/products', icon: FiBox },
+    { name: 'Categories', href: '/admin/categories', icon: FiGrid },
     // Orders, Customers, Settings hidden for Phase 1 as requested
 ];
 

@@ -6,11 +6,23 @@ import { supabase } from '@/shared/lib/supabase';
 import { User } from '@supabase/supabase-js';
 import toast from 'react-hot-toast';
 
+// Session timeout configuration
+const INACTIVITY_TIMEOUT = 60 * 60 * 1000; // 60 minutes
+const WARNING_BEFORE_LOGOUT = 5 * 60 * 1000; // 5 minutes warning
+
 export function useAdminAuth() {
     const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [lastActivity, setLastActivity] = useState(Date.now());
+    const [showTimeoutWarning, setShowTimeoutWarning] = useState(false);
     const router = useRouter();
     const pathname = usePathname();
+
+    // Reset activity timer
+    const resetActivity = () => {
+        setLastActivity(Date.now());
+        setShowTimeoutWarning(false);
+    };
 
     useEffect(() => {
         // 1. Check active session
@@ -43,6 +55,43 @@ export function useAdminAuth() {
         };
     }, [pathname, router]);
 
+    // 3. Track user activity
+    useEffect(() => {
+        if (!user) return; // Only track activity when logged in
+
+        const events = ['mousedown', 'keydown', 'scroll', 'touchstart', 'mousemove'];
+        
+        events.forEach(event => {
+            window.addEventListener(event, resetActivity);
+        });
+
+        return () => {
+            events.forEach(event => {
+                window.removeEventListener(event, resetActivity);
+            });
+        };
+    }, [user]);
+
+    // 4. Check for inactivity
+    useEffect(() => {
+        if (!user) return; // Only check when logged in
+
+        const interval = setInterval(() => {
+            const inactiveTime = Date.now() - lastActivity;
+            
+            if (inactiveTime > INACTIVITY_TIMEOUT) {
+                // Auto logout
+                logout();
+                toast.error('Session expired due to inactivity');
+            } else if (inactiveTime > INACTIVITY_TIMEOUT - WARNING_BEFORE_LOGOUT) {
+                // Show warning
+                setShowTimeoutWarning(true);
+            }
+        }, 60000); // Check every minute
+
+        return () => clearInterval(interval);
+    }, [lastActivity, user]);
+
     const login = async (email: string, pass: string) => {
         setIsLoading(true);
         const { data, error } = await supabase.auth.signInWithPassword({
@@ -57,6 +106,7 @@ export function useAdminAuth() {
         }
 
         toast.success('Welcome back, Admin!');
+        resetActivity(); // Reset activity on login
         router.push('/admin');
         return true;
     };
@@ -64,6 +114,7 @@ export function useAdminAuth() {
     const logout = async () => {
         await supabase.auth.signOut();
         setUser(null);
+        setShowTimeoutWarning(false);
         router.push('/admin/login');
         toast.success('Logged out successfully');
     };
@@ -81,6 +132,8 @@ export function useAdminAuth() {
         user,
         isLoading,
         login,
-        logout
+        logout,
+        showTimeoutWarning,
+        extendSession: resetActivity,
     };
 }

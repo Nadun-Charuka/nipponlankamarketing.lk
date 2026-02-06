@@ -37,17 +37,13 @@ export function ProductInfo({ product }: ProductInfoProps) {
                             {product.name}
                         </h1>
                         <div className="flex items-center gap-4 text-sm">
-                            <span className="bg-primary-50 text-primary-700 px-2.5 py-0.5 rounded-full font-medium">
-                                Samsung
-                            </span>
-                            <div className="flex items-center text-accent-gold">
-                                <span className="font-bold mr-1">4.8</span>
-                                <span>★★★★★</span>
-                                <span className="text-gray-400 ml-1">(24 reviews)</span>
-                            </div>
-                            <span className="text-gray-300">|</span>
+                            {product.brand && (
+                                <span className="bg-primary-50 text-primary-700 px-2.5 py-0.5 rounded-full font-medium">
+                                    {product.brand}
+                                </span>
+                            )}
                             <span className={`font-medium ${product.stock_status === 'in_stock' ? 'text-green-600' : 'text-red-500'}`}>
-                                {product.stock_status === 'in_stock' ? 'In Stock' : 'Out of Stock'}
+                                {product.stock_status === 'in_stock' ? 'In Stock' : product.stock_status === 'pre_order' ? 'Pre Order' : 'Out of Stock'}
                             </span>
                         </div>
                     </div>
@@ -124,7 +120,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
                     </div>
                     <div>
                         <h4 className="text-sm font-bold text-gray-900">Official Warranty</h4>
-                        <p className="text-xs text-gray-500">2 Years Agent Warranty</p>
+                        <p className="text-xs text-gray-500">Genuine Products</p>
                     </div>
                 </div>
                 <div className="flex items-start gap-3">

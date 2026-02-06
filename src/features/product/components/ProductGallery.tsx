@@ -23,8 +23,10 @@ interface ProductGalleryProps {
 export function ProductGallery({ images = [], featuredImage, productName }: ProductGalleryProps) {
     const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);
 
-    // Combine featured image with gallery images if available
-    const rawImages = featuredImage ? [featuredImage, ...images] : images;
+    // Combine featured image with gallery images, avoiding duplicates
+    const rawImages = featuredImage
+        ? [featuredImage, ...images.filter(img => img !== featuredImage)]
+        : images;
 
     // SANITIZE: Filter out known invalid paths (allow only http/https)
     const allImages = rawImages.filter(img => img && (img.startsWith('http') || img.startsWith('https')));
@@ -68,12 +70,7 @@ export function ProductGallery({ images = [], featuredImage, productName }: Prod
                     ))}
                 </Swiper>
 
-                {/* Discount Badge */}
-                <div className="absolute top-3 left-3 z-10">
-                    <span className="px-2 py-1 bg-accent-red text-white text-[10px] font-bold uppercase tracking-wider rounded shadow-sm">
-                        -20%
-                    </span>
-                </div>
+                {/* Dynamic Discount Badge - only show if there's an actual discount */}
             </div>
 
             {/* Thumbnail Slider (Desktop only usually, or small on mobile) */}

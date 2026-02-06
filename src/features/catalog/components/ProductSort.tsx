@@ -12,12 +12,21 @@ const sortOptions = [
     { name: 'Price: High to Low', value: 'price_desc' },
 ];
 
-export function ProductSort() {
+interface ProductSortProps {
+    onSortChange?: (sortValue: string) => void;
+}
+
+export function ProductSort({ onSortChange }: ProductSortProps = {}) {
     const [selected, setSelected] = useState(sortOptions[0]);
+
+    const handleChange = (option: typeof sortOptions[0]) => {
+        setSelected(option);
+        onSortChange?.(option.value);
+    };
 
     return (
         <div className="w-full lg:w-56">
-            <Listbox value={selected} onChange={setSelected}>
+            <Listbox value={selected} onChange={handleChange}>
                 <div className="relative mt-1">
                     <Listbox.Button className="relative w-full cursor-default rounded-lg bg-gray-50 lg:bg-white py-2.5 lg:py-2 pl-3 pr-10 text-left shadow-sm lg:shadow-md focus:outline-none focus:visible:border-indigo-500 focus:visible:ring-2 focus:visible:ring-white/75 sm:text-sm border border-gray-200">
                         <span className="block truncate text-sm font-medium text-gray-700">{selected.name}</span>

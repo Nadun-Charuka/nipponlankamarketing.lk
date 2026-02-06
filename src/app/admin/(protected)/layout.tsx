@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { AdminSidebar } from '@/features/admin/components/AdminSidebar';
 import { AdminHeader } from '@/features/admin/components/AdminHeader';
+import { SessionTimeoutWarning } from '@/features/admin/components/SessionTimeoutWarning';
 import { useAdminAuth } from '@/features/admin/hooks/useAdminAuth';
 import { LogoLoader } from '@/shared/components/LogoLoader';
 
@@ -12,7 +13,7 @@ export default function AdminLayout({
 }: {
     children: React.ReactNode;
 }) {
-    const { isAuthenticated, isLoading } = useAdminAuth();
+    const { isAuthenticated, isLoading, showTimeoutWarning, extendSession, logout } = useAdminAuth();
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     // Don't show layout on loading or if not authenticated (Login page is handled separately somewhat by useAdminAuth redirect, 
@@ -49,16 +50,23 @@ export default function AdminLayout({
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            <AdminSidebar />
+        <>
+            <SessionTimeoutWarning
+                show={showTimeoutWarning}
+                onExtend={extendSession}
+                onLogout={logout}
+            />
+            <div className="min-h-screen bg-gray-50">
+                <AdminSidebar />
 
-            <div className="md:pl-64 flex flex-col flex-1">
-                <AdminHeader onMenuClick={() => setSidebarOpen(true)} />
+                <div className="md:pl-64 flex flex-col flex-1">
+                    <AdminHeader onMenuClick={() => setSidebarOpen(true)} />
 
-                <main className="flex-1 py-6 px-4 sm:px-6 lg:px-8">
-                    {children}
-                </main>
+                    <main className="flex-1 py-6 px-4 sm:px-6 lg:px-8">
+                        {children}
+                    </main>
+                </div>
             </div>
-        </div>
+        </>
     );
 }

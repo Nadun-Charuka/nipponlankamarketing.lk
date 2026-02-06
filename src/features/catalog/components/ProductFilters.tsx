@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Dialog, Disclosure, Transition } from '@headlessui/react';
 import { FiX, FiMinus, FiPlus, FiFilter } from 'react-icons/fi';
+import { supabase } from '@/shared/lib/supabase';
 
 export interface FilterState {
     category?: string[];
@@ -19,49 +20,82 @@ interface ProductFiltersProps {
     hideCategoryFilter?: boolean;
 }
 
-const filtersDef = [
-    {
-        id: 'category',
-        name: 'Category',
-        options: [
-            { value: 'televisions', label: 'Televisions' },
-            { value: 'refrigerators', label: 'Refrigerators' },
-            { value: 'washing-machines', label: 'Washing Machines' },
-            { value: 'air-conditioners', label: 'Air Conditioners' },
-            { value: 'kitchen', label: 'Kitchen Appliances' },
-            { value: 'furniture', label: 'Furniture' },
-        ],
-    },
-    {
-        id: 'brand',
-        name: 'Brand',
-        options: [
-            { value: 'samsung', label: 'Samsung' },
-            { value: 'lg', label: 'LG' },
-            { value: 'abans', label: 'Abans' },
-            { value: 'panasonic', label: 'Panasonic' },
-            { value: 'sony', label: 'Sony' },
-            { value: 'singer', label: 'Singer' },
-            { value: 'damro', label: 'Damro' },
-        ],
-    },
-    {
-        id: 'price',
-        name: 'Price Range',
-        type: 'range',
-        options: [],
-    },
-    {
-        id: 'stock',
-        name: 'Availability',
-        options: [
-            { value: 'in_stock', label: 'In Stock' },
-            { value: 'pre_order', label: 'Pre Order' },
-        ],
-    },
-];
-
 export function ProductFilters({ mobileFiltersOpen, setMobileFiltersOpen, activeFilters, onFilterChange, hideCategoryFilter = false, mode = 'both' }: ProductFiltersProps & { mode?: 'mobile' | 'desktop' | 'both' }) {
+    const [categories, setCategories] = useState<Array<{ value: string; label: string }>>([]);
+    const [brands, setBrands] = useState<Array<{ value: string; label: string }>>([]);
+
+    // Load categories from database
+    useEffect(() => {
+        async function fetchCategories() {
+            const { data, error } = await supabase
+                .from('categories')
+                .select('id, name, slug')
+                .order('name');
+
+            if (error) {
+                console.error('Error fetching categories:', error);
+                // Fallback to hardcoded categories
+                setCategories([
+                    { value: 'televisions', label: 'Televisions' },
+                    { value: 'refrigerators', label: 'Refrigerators' },
+                    { value: 'washing-machines', label: 'Washing Machines' },
+                    { value: 'air-conditioners', label: 'Air Conditioners' },
+                ]);
+            } else {
+                setCategories((data || []).map(cat => ({ value: cat.id, label: cat.name })));
+            }
+        }
+
+        async function fetchBrands() {
+            const { data, error } = await supabase
+                .from('products')
+                .select('brand')
+                .not('brand', 'is', null)
+                .order('brand');
+
+            if (error) {
+                console.error('Error fetching brands:', error);
+            } else {
+                // Get unique brands
+                const uniqueBrands = Array.from(new Set(data?.map(p => p.brand).filter(Boolean) || []));
+                setBrands(uniqueBrands.map(brand => ({ value: brand!.toLowerCase(), label: brand! })));
+            }
+        }
+
+        fetchCategories();
+        fetchBrands();
+    }, []);
+
+    const filtersDef = [
+        {
+            id: 'category',
+            name: 'Category',
+            options: categories,
+        },
+        {
+            id: 'brand',
+            name: 'Brand',
+            options: brands.length > 0 ? brands : [
+                { value: 'samsung', label: 'Samsung' },
+                { value: 'lg', label: 'LG' },
+                { value: 'sony', label: 'Sony' },
+            ],
+        },
+        {
+            id: 'price',
+            name: 'Price Range',
+            type: 'range',
+            options: [],
+        },
+        {
+            id: 'stock',
+            name: 'Availability',
+            options: [
+                { value: 'in_stock', label: 'In Stock' },
+                { value: 'pre_order', label: 'Pre Order' },
+            ],
+        },
+    ];
 
     // Filter out category section if we're on a category-specific page
     const visibleFilters = hideCategoryFilter

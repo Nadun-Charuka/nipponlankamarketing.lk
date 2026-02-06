@@ -17,7 +17,6 @@ interface CategoryPageProps {
 export default function CategoryPage({ params }: CategoryPageProps) {
     // Unwrap params Promise (Next.js 15 requirement)
     const { slug } = use(params);
-    const categoryId = slug;
 
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
     const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
@@ -35,15 +34,33 @@ export default function CategoryPage({ params }: CategoryPageProps) {
         stock: [] as string[],
     });
 
-    // 1. Fetch Products for Category
+    // 1. Fetch Products for Category by slug
     useEffect(() => {
         async function fetchCategoryProducts() {
-            console.log('🔍 Fetching products for category:', categoryId);
+            console.log('🔍 Fetching products for category slug:', slug);
             setLoading(true);
+
+            // First, get the category by slug
+            const { data: category, error: categoryError } = await supabase
+                .from('categories')
+                .select('id, name')
+                .eq('slug', slug)
+                .single();
+
+            if (categoryError || !category) {
+                console.error('Category not found:', categoryError);
+                setLoading(false);
+                notFound();
+                return;
+            }
+
+            setCategoryTitle(category.name);
+
+            // Then fetch products for this category using the UUID
             const { data, error } = await supabase
                 .from('products')
                 .select('*')
-                .eq('category_id', categoryId)
+                .eq('category_id', category.id)
                 .eq('is_active', true)
                 .order('created_at', { ascending: false });
 
@@ -51,24 +68,15 @@ export default function CategoryPage({ params }: CategoryPageProps) {
                 console.error('❌ Error fetching category products:', error);
                 toast.error('Failed to load products');
             } else {
-                console.log(`✅ Found ${data?.length || 0} products for category "${categoryId}":`, data);
+                console.log(`✅ Found ${data?.length || 0} products for category "${category.name}":`, data);
                 setProducts(data || []);
                 setFilteredProducts(data || []);
             }
             setLoading(false);
-
-            // Set Title
-            const title = categoryId
-                .split('-')
-                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                .join(' ');
-            setCategoryTitle(title);
         }
 
-        if (categoryId) {
-            fetchCategoryProducts();
-        }
-    }, [categoryId]);
+        fetchCategoryProducts();
+    }, [slug]);
 
     // 2. Client-Side Filtering
     useEffect(() => {

@@ -17,39 +17,38 @@ export function DualPriceDisplay({
     const monthlyInstallment = basePrice / installmentMonths;
 
     const formatPrice = (price: number) => {
-        return new Intl.NumberFormat('en-LK', {
-            style: 'currency',
-            currency: 'LKR',
+        const formatted = new Intl.NumberFormat('en-LK', {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
-        }).format(price).replace('LKR', 'Rs.');
+        }).format(price);
+        return `Rs. ${formatted}`;
     };
 
     if (variant === 'detail') {
         return (
             <div className={cn('space-y-4', className)}>
                 {/* Cash Price - Highlighted */}
-                <div className="bg-white border-2 border-accent-red rounded-lg p-5 shadow-sm">
+                <div className="bg-white border-2 border-accent-red rounded-lg p-6 shadow-sm">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm font-bold text-accent-red uppercase tracking-wider mb-1">
+                            <p className="text-sm font-bold text-accent-red uppercase tracking-wider mb-2">
                                 Cash Price (Save 20%)
                             </p>
                             <p className="text-4xl font-bold text-gray-900">
                                 {formatPrice(cashPrice)}
                             </p>
-                            <p className="text-sm text-gray-500 mt-1 line-through">
+                            <p className="text-sm text-gray-500 mt-2 line-through">
                                 {formatPrice(basePrice)}
                             </p>
                         </div>
-                        <div className="bg-accent-red text-white px-3 py-1 rounded text-sm font-bold shadow-sm">
+                        <div className="bg-accent-red text-white px-4 py-2 rounded text-sm font-bold shadow-sm">
                             -20%
                         </div>
                     </div>
                 </div>
 
                 {/* Installment Price */}
-                <div className="bg-gray-50 border border-gray-200 rounded-lg p-5">
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
                     <div>
                         <p className="text-sm font-bold text-primary-700 uppercase tracking-wider mb-1">
                             Easy Installment Plan

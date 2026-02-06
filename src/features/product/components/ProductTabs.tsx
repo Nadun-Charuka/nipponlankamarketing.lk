@@ -52,16 +52,7 @@ export function ProductTabs({ description, specifications }: ProductTabsProps) {
                         )}
                     >
                         <div className="prose prose-sm prose-purple max-w-none text-gray-600 leading-relaxed">
-                            <p className="mb-2">{description}</p>
-                            <p className="mb-2">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                            </p>
-                            <ul className="my-2">
-                                <li>Premium build quality</li>
-                                <li>Energy efficient operation</li>
-                                <li>Smart features included</li>
-                                <li>2 Year Comprehensive Warranty</li>
-                            </ul>
+                            <p className="whitespace-pre-wrap">{description}</p>
                         </div>
                     </Tab.Panel>
 

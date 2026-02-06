@@ -19,6 +19,7 @@ export default function ProductsPage() {
     const [products, setProducts] = useState<Product[]>([]);
     const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [sortBy, setSortBy] = useState('popular');
 
     // Filter State
     const [activeFilters, setActiveFilters] = useState<FilterState>({
@@ -73,14 +74,13 @@ export default function ProductsPage() {
             results = results.filter(p => p.category_id && activeFilters.category!.includes(p.category_id));
         }
 
-        // Filter by Brand (Mock logic: checking if name contains brand)
+        // Filter by Brand
         if (activeFilters.brand.length > 0) {
-            results = results.filter(p => {
-                const brandMatch = activeFilters.brand.some((brand: string) =>
-                    p.name.toLowerCase().includes(brand.toLowerCase())
-                );
-                return brandMatch;
-            });
+            results = results.filter(p =>
+                p.brand && activeFilters.brand.some(brand =>
+                    p.brand!.toLowerCase() === brand.toLowerCase()
+                )
+            );
         }
 
         // Filter by Price
@@ -96,8 +96,26 @@ export default function ProductsPage() {
             results = results.filter(p => activeFilters.stock.includes(p.stock_status));
         }
 
+        // Apply Sorting
+        switch (sortBy) {
+            case 'price_asc':
+                results.sort((a, b) => a.cash_price - b.cash_price);
+                break;
+            case 'price_desc':
+                results.sort((a, b) => b.cash_price - a.cash_price);
+                break;
+            case 'newest':
+                results.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+                break;
+            case 'popular':
+            case 'rating':
+            default:
+                // Keep default order (newest first from database)
+                break;
+        }
+
         setFilteredProducts(results);
-    }, [products, searchQuery, activeFilters]);
+    }, [products, searchQuery, activeFilters, sortBy]);
 
     const handleQuickView = (product: Product) => {
         setQuickViewProduct(product);
@@ -128,7 +146,7 @@ export default function ProductsPage() {
                         </h1>
 
                         <div className="flex items-center">
-                            <ProductSort />
+                            <ProductSort onSortChange={setSortBy} />
                         </div>
                     </div>
 
@@ -149,7 +167,7 @@ export default function ProductsPage() {
                                 Filter
                             </button>
                             <div className="flex-1 min-w-0">
-                                <ProductSort />
+                                <ProductSort onSortChange={setSortBy} />
                             </div>
                         </div>
                     </div>
