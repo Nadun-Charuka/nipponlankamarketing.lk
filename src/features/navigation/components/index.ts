@@ -1,5 +1,6 @@
-export { TopBar } from './TopBar';
-export { MainNav } from './MainNav';
-export { MegaMenu } from './MegaMenu';
-export { MobileMenu } from './MobileMenu';
-export { SearchModal } from './SearchModal';
+export * from './TopBar';
+export * from './MainNav';
+export * from './MegaMenu';
+export * from './MobileMenu';
+export * from './SearchModal';
+export * from './Footer';

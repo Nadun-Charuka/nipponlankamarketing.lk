@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
 import { Toaster } from 'react-hot-toast';
-import { TopBar, MainNav } from '@/features/navigation/components';
+import { TopBar, MainNav, Footer } from '@/features/navigation/components';
 import "../styles/globals.css";
 
 const inter = Inter({
@@ -71,6 +71,7 @@ export default function RootLayout({
         <TopBar />
         <MainNav />
         {children}
+        <Footer />
         <Toaster
           position="top-right"
           toastOptions={{
