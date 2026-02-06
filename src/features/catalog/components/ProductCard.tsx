@@ -56,14 +56,17 @@ export function ProductCard({ product, onQuickView, onAddToWishlist }: ProductCa
             {/* Image Container */}
             <Link href={`/products/${product.slug}`} className="relative aspect-square bg-white border-b border-gray-100 overflow-hidden">
                 {/* Placeholder Image */}
-                <div className="w-full h-full flex items-center justify-center text-gray-300 group-hover:scale-105 transition-transform duration-300">
+                <div className="w-full h-full flex items-center justify-center bg-gray-50 group-hover:scale-105 transition-transform duration-300">
                     {product.featured_image ? (
-                        // In real app use Image component
-                        <div className="text-center">
-                            <div className="text-6xl mb-2">📦</div>
-                        </div>
+                        <Image
+                            src={product.featured_image}
+                            alt={product.name}
+                            fill
+                            className="object-cover object-center"
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        />
                     ) : (
-                        <div className="text-center">
+                        <div className="text-center text-gray-300">
                             <div className="text-6xl mb-2">📦</div>
                         </div>
                     )}

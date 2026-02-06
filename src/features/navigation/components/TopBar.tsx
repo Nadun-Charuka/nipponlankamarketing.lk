@@ -28,11 +28,11 @@ export function TopBar() {
                     {/* Right: Account & Cart */}
                     <div className="flex items-center gap-4">
                         <Link
-                            href="/account"
+                            href="/admin/login"
                             className="flex items-center gap-2 hover:text-primary-200 transition-colors"
                         >
                             <FiUser className="w-4 h-4" />
-                            <span className="hidden sm:inline">Account</span>
+                            <span className="hidden sm:inline">Login / Admin</span>
                         </Link>
 
                         <Link

@@ -1,49 +1,78 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { notFound } from 'next/navigation';
 import { FiFilter } from 'react-icons/fi';
 import toast from 'react-hot-toast';
-import { useSearchParams } from 'next/navigation';
+import { supabase } from '@/shared/lib/supabase';
 import { ProductFilters, ProductSort, ProductCard, ProductCardMobile, QuickViewModal } from '@/features/catalog/components';
 import { Product } from '@/shared/types/database';
-import { allProducts } from '@/shared/data/products';
 
-export default function ProductsPage() {
-    const searchParams = useSearchParams();
-    const searchQuery = searchParams.get('search'); // 'q' or 'search'
+interface CategoryPageProps {
+    params: {
+        slug: string;
+    };
+}
+
+export default function CategoryPage({ params }: CategoryPageProps) {
+    const { slug } = params;
+    const categoryId = slug;
 
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
     const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
-    const [filteredProducts, setFilteredProducts] = useState<Product[]>(allProducts);
+
+    // Data State
+    const [products, setProducts] = useState<Product[]>([]);
+    const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [categoryTitle, setCategoryTitle] = useState('');
 
     // Filter State
     const [activeFilters, setActiveFilters] = useState({
-        category: [] as string[],
+        category: [categoryId] as string[],
         brand: [] as string[],
         priceRange: { min: '' as number | '', max: '' as number | '' },
         stock: [] as string[],
     });
 
-    // Initial filter effect including Search and Active Filters
+    // 1. Fetch Products for Category
     useEffect(() => {
-        let results = [...allProducts];
+        async function fetchCategoryProducts() {
+            setLoading(true);
+            const { data, error } = await supabase
+                .from('products')
+                .select('*')
+                .eq('category_id', categoryId)
+                .eq('is_active', true)
+                .order('created_at', { ascending: false });
 
-        // 1. Filter by Search Query
-        if (searchQuery) {
-            const query = searchQuery.toLowerCase();
-            results = results.filter(p =>
-                p.name.toLowerCase().includes(query) ||
-                p.description?.toLowerCase().includes(query) ||
-                p.category_id?.toLowerCase().includes(query)
-            );
+            if (error) {
+                console.error('Error fetching category products:', error);
+                toast.error('Failed to load products');
+            } else {
+                setProducts(data || []);
+                setFilteredProducts(data || []);
+            }
+            setLoading(false);
+
+            // Set Title
+            const title = categoryId
+                .split('-')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ');
+            setCategoryTitle(title);
         }
 
-        // 2. Filter by Category
-        if (activeFilters.category.length > 0) {
-            results = results.filter(p => p.category_id && activeFilters.category.includes(p.category_id));
+        if (categoryId) {
+            fetchCategoryProducts();
         }
+    }, [categoryId]);
 
-        // 3. Filter by Brand (Mock logic: checking if name contains brand)
+    // 2. Client-Side Filtering
+    useEffect(() => {
+        let results = [...products];
+
+        // Filter by Brand
         if (activeFilters.brand.length > 0) {
             results = results.filter(p => {
                 const brandMatch = activeFilters.brand.some(brand =>
@@ -53,7 +82,7 @@ export default function ProductsPage() {
             });
         }
 
-        // 4. Filter by Price
+        // Filter by Price
         if (activeFilters.priceRange.min !== '') {
             results = results.filter(p => p.cash_price >= (activeFilters.priceRange.min as number));
         }
@@ -61,13 +90,13 @@ export default function ProductsPage() {
             results = results.filter(p => p.cash_price <= (activeFilters.priceRange.max as number));
         }
 
-        // 5. Filter by Stock
+        // Filter by Stock
         if (activeFilters.stock.length > 0) {
             results = results.filter(p => activeFilters.stock.includes(p.stock_status));
         }
 
         setFilteredProducts(results);
-    }, [searchQuery, activeFilters]);
+    }, [products, activeFilters]);
 
     const handleQuickView = (product: Product) => {
         setQuickViewProduct(product);
@@ -81,7 +110,6 @@ export default function ProductsPage() {
         <div className="bg-white">
             <div>
                 {/* Mobile filter dialog */}
-                {/* Mobile filter dialog */}
                 <ProductFilters
                     mobileFiltersOpen={mobileFiltersOpen}
                     setMobileFiltersOpen={setMobileFiltersOpen}
@@ -94,7 +122,7 @@ export default function ProductsPage() {
                     {/* Desktop Header */}
                     <div className="hidden lg:flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
                         <h1 className="text-4xl font-display font-bold tracking-tight text-gray-900">
-                            All Products
+                            {categoryTitle}
                         </h1>
 
                         <div className="flex items-center">
@@ -105,7 +133,7 @@ export default function ProductsPage() {
                     {/* Mobile Header & Sticky Bar */}
                     <div className="lg:hidden pt-4 pb-4">
                         <h1 className="text-2xl font-display font-bold tracking-tight text-gray-900 mb-4 px-2">
-                            All Products
+                            {categoryTitle}
                         </h1>
 
                         {/* Sticky Toolbar */}
@@ -125,10 +153,6 @@ export default function ProductsPage() {
                     </div>
 
                     <section aria-labelledby="products-heading" className="pb-24 pt-6">
-                        <h2 id="products-heading" className="sr-only">
-                            Products
-                        </h2>
-
                         <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
                             {/* Desktop Sidebar Filters */}
                             <div className="hidden lg:block">
@@ -143,28 +167,36 @@ export default function ProductsPage() {
 
                             {/* Product grid */}
                             <div className="lg:col-span-3">
-                                {/* Mobile Grid (2 columns) */}
-                                <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:hidden">
-                                    {filteredProducts.map((product) => (
-                                        <ProductCardMobile
-                                            key={product.id}
-                                            product={product}
-                                            onAddToWishlist={handleAddToWishlist}
-                                        />
-                                    ))}
-                                </div>
+                                {filteredProducts.length > 0 ? (
+                                    <>
+                                        {/* Mobile Grid (2 columns) */}
+                                        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:hidden">
+                                            {filteredProducts.map((product) => (
+                                                <ProductCardMobile
+                                                    key={product.id}
+                                                    product={product}
+                                                    onAddToWishlist={handleAddToWishlist}
+                                                />
+                                            ))}
+                                        </div>
 
-                                {/* Desktop Grid (3 columns) */}
-                                <div className="hidden lg:grid grid-cols-3 xl:gap-8 gap-y-10">
-                                    {filteredProducts.map((product) => (
-                                        <ProductCard
-                                            key={product.id}
-                                            product={product}
-                                            onQuickView={handleQuickView}
-                                            onAddToWishlist={handleAddToWishlist}
-                                        />
-                                    ))}
-                                </div>
+                                        {/* Desktop Grid (3 columns) */}
+                                        <div className="hidden lg:grid grid-cols-3 xl:gap-8 gap-y-10">
+                                            {filteredProducts.map((product) => (
+                                                <ProductCard
+                                                    key={product.id}
+                                                    product={product}
+                                                    onQuickView={handleQuickView}
+                                                    onAddToWishlist={handleAddToWishlist}
+                                                />
+                                            ))}
+                                        </div>
+                                    </>
+                                ) : (
+                                    <div className="text-center py-20 bg-gray-50 rounded-xl">
+                                        <p className="text-gray-500 text-lg">No products found in this category.</p>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </section>

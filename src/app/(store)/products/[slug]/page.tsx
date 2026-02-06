@@ -1,136 +1,55 @@
 'use client';
 
-import { useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useParams, notFound } from 'next/navigation';
 import { ProductGallery, ProductInfo, ProductTabs } from '@/features/product/components';
 import { ProductCarousel } from '@/features/catalog/components';
 import { Product } from '@/shared/types/database';
-
-// Mock Data for PDP
-const mockProduct: Product = {
-    id: 'prod-1',
-    name: 'Samsung 55" 4K Smart Crystal UHD TV - UA55AU7000',
-    slug: 'samsung-55-4k-smart-tv',
-    description: 'Experience crystal clear colors that are fine-tuned to deliver a naturally crisp and vivid picture. The Crystal Processor 4K ensures you get up to 4K resolution for the content you love.',
-    category_id: 'cat-tv',
-    base_price: 245000,
-    cash_price: 196000,
-    installment_months: 12,
-    stock_status: 'in_stock',
-    sku: 'UA55AU7000',
-    images: [],
-    featured_image: null,
-    specifications: {
-        'Display Size': '55 Inch',
-        'Resolution': '3,840 x 2,160',
-        'Picture Engine': 'Crystal Processor 4K',
-        'HDMI Ports': '3',
-        'USB Ports': '1',
-        'Sound Output': '20W',
-        'Operating System': 'Tizen™',
-        'Warranty': '2 Years Company Warranty'
-    },
-    meta_title: null,
-    meta_description: null,
-    is_featured: true,
-    is_active: true,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-};
-
-const relatedProducts: Product[] = [
-    {
-        id: '1',
-        name: 'Samsung 55" 4K Crystal UHD TV',
-        slug: 'samsung-55-4k-uhd',
-        base_price: 220000,
-        cash_price: 176000,
-        installment_months: 12,
-        stock_status: 'in_stock',
-        is_featured: true,
-        images: [],
-        featured_image: null,
-        description: null,
-        category_id: null,
-        sku: null,
-        specifications: {},
-        meta_title: null,
-        meta_description: null,
-        is_active: true,
-        created_at: '',
-        updated_at: ''
-    },
-    {
-        id: '2',
-        name: 'LG 65" NanoCell 4K TV',
-        slug: 'lg-65-nanocell',
-        base_price: 350000,
-        cash_price: 280000,
-        installment_months: 24,
-        stock_status: 'pre_order',
-        is_featured: false,
-        images: [],
-        featured_image: null,
-        description: null,
-        category_id: null,
-        sku: null,
-        specifications: {},
-        meta_title: null,
-        meta_description: null,
-        is_active: true,
-        created_at: '',
-        updated_at: ''
-    },
-    {
-        id: '3',
-        name: 'Sony 50" Bravia XR OLED',
-        slug: 'sony-50-bravia',
-        base_price: 490000,
-        cash_price: 392000,
-        installment_months: 24,
-        stock_status: 'in_stock',
-        is_featured: true,
-        images: [],
-        featured_image: null,
-        description: null,
-        category_id: null,
-        sku: null,
-        specifications: {},
-        meta_title: null,
-        meta_description: null,
-        is_active: true,
-        created_at: '',
-        updated_at: ''
-    },
-    {
-        id: '4',
-        name: 'Panasonic 32" LED TV',
-        slug: 'panasonic-32-led',
-        base_price: 65000,
-        cash_price: 52000,
-        installment_months: 6,
-        stock_status: 'in_stock',
-        is_featured: false,
-        images: [],
-        featured_image: null,
-        description: null,
-        category_id: null,
-        sku: null,
-        specifications: {},
-        meta_title: null,
-        meta_description: null,
-        is_active: true,
-        created_at: '',
-        updated_at: ''
-    }
-];
+import { supabase } from '@/shared/lib/supabase';
+import { LogoLoader } from '@/shared/components/LogoLoader';
 
 export default function ProductDetailPage() {
     const params = useParams();
+    const slug = params.slug as string;
 
-    // In a real app, fetch product by params.slug
-    // const product = getProductBySlug(params.slug);
-    const product = mockProduct;
+    const [product, setProduct] = useState<Product | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    // Fetch Product by Slug
+    useEffect(() => {
+        async function fetchProduct() {
+            setLoading(true);
+            const { data, error } = await supabase
+                .from('products')
+                .select('*')
+                .eq('slug', slug)
+                .single();
+
+            if (error || !data) {
+                console.error('Error loading product:', error);
+                // In a real app, you might want to redirect or show 404
+            } else {
+                setProduct(data);
+            }
+            setLoading(false);
+        }
+
+        if (slug) {
+            fetchProduct();
+        }
+    }, [slug]);
+
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gray-50">
+                <LogoLoader />
+            </div>
+        );
+    }
+
+    if (!product) {
+        return <div className="min-h-screen flex items-center justify-center">Product not found</div>;
+    }
 
     return (
         <main className="bg-white min-h-screen pb-24 md:pb-16">
@@ -180,12 +99,14 @@ export default function ProductDetailPage() {
                 </div>
 
                 {/* Related Products - Distinct Section */}
+                {/* Related Products - Distinct Section 
                 <div className="mt-24 border-t border-gray-100 pt-16">
                     <ProductCarousel
                         title="You Might Also Like"
-                        products={relatedProducts}
+                        products={[]} // TODO: Fetch related products
                     />
                 </div>
+                */}
             </div>
 
             {/* Mobile Sticky Action Bar */}

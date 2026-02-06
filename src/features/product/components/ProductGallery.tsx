@@ -50,10 +50,14 @@ export function ProductGallery({ images = [], featuredImage, productName }: Prod
                     {allImages.map((img, index) => (
                         <SwiperSlide key={index}>
                             <div className="relative w-full h-full flex items-center justify-center bg-white p-4">
-                                {/* In a real app, use Next.js Image with object-contain */}
-                                {/* <Image src={img} alt={`${productName} - View ${index + 1}`} fill className="object-contain" /> */}
-                                <div className="text-6xl text-gray-200">📦</div>
-                                <div className="absolute bottom-4 left-0 right-0 text-center text-[10px] text-gray-400">
+                                <Image
+                                    src={img}
+                                    alt={`${productName} - View ${index + 1}`}
+                                    fill
+                                    className="object-contain"
+                                    sizes="(max-width: 768px) 100vw, 50vw"
+                                />
+                                <div className="absolute bottom-4 left-0 right-0 text-center text-[10px] text-gray-400 bg-white/50 backdrop-blur-sm mx-auto w-fit px-2 rounded-full">
                                     {index + 1} / {allImages.length}
                                 </div>
                             </div>
@@ -81,9 +85,14 @@ export function ProductGallery({ images = [], featuredImage, productName }: Prod
                     className="thumbs-swiper h-20"
                 >
                     {allImages.map((img, index) => (
-                        <SwiperSlide key={index} className="cursor-pointer rounded-lg overflow-hidden border border-gray-200 !h-full">
-                            <div className="w-full h-full flex items-center justify-center bg-gray-50 opacity-60 hover:opacity-100 transition-opacity aria-selected:opacity-100 thumbs-slide-active:opacity-100 thumbs-slide-active:ring-2 thumbs-slide-active:ring-primary-500">
-                                <span className="text-xl">📦</span>
+                        <SwiperSlide key={index} className="cursor-pointer rounded-lg overflow-hidden border border-gray-200 !h-full relative">
+                            <div className="w-full h-full flex items-center justify-center bg-white opacity-60 hover:opacity-100 transition-opacity aria-selected:opacity-100 thumbs-slide-active:opacity-100 thumbs-slide-active:ring-2 thumbs-slide-active:ring-primary-500">
+                                <Image
+                                    src={img}
+                                    alt={`Thumb ${index + 1}`}
+                                    fill
+                                    className="object-cover"
+                                />
                             </div>
                         </SwiperSlide>
                     ))}
