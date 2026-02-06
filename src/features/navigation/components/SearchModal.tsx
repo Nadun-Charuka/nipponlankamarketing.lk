@@ -4,7 +4,8 @@ import { Fragment, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Dialog, Transition } from '@headlessui/react';
 import { FiX, FiSearch } from 'react-icons/fi';
-import { allProducts } from '@/shared/data/products';
+import { supabase } from '@/shared/lib/supabase';
+import Image from 'next/image';
 
 interface SearchModalProps {
     isOpen: boolean;
@@ -14,28 +15,47 @@ interface SearchModalProps {
 export function SearchModal({ isOpen, onClose }: SearchModalProps) {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
 
-    const handleSearch = (query: string) => {
-        setSearchQuery(query);
+    // Debounce search to avoid too many requests
+    useEffect(() => {
+        const delayDebounceFn = setTimeout(async () => {
+            if (searchQuery.length > 1) {
+                setIsLoading(true);
+                const { data, error } = await supabase
+                    .from('products')
+                    .select('id, name, slug, cash_price, featured_image, category_id')
+                    .or(`name.ilike.%${searchQuery}%,category_id.ilike.%${searchQuery}%`)
+                    .limit(5);
 
-        if (query.length > 1) {
-            const lowerQuery = query.toLowerCase();
-            const results = allProducts.filter(p =>
-                p.name.toLowerCase().includes(lowerQuery) ||
-                (p.category_id && p.category_id.toLowerCase().includes(lowerQuery))
-            ).slice(0, 5); // Limit to 5 results for preview
+                if (!error && data) {
+                    setSearchResults(data.map(p => {
+                        // SANITIZE: Check if image is a known invalid path or null
+                        let validImage = p.featured_image;
+                        if (validImage && (!validImage.startsWith('http') && !validImage.startsWith('https'))) {
+                            validImage = null; // Force fallback logic
+                        }
 
-            setSearchResults(results.map(p => ({
-                id: p.id,
-                name: p.name,
-                price: p.cash_price, // Use cash price for display
-                image: p.featured_image,
-                slug: p.slug
-            })));
-        } else {
-            setSearchResults([]);
-        }
-    };
+                        return {
+                            id: p.id,
+                            name: p.name,
+                            price: p.cash_price,
+                            image: validImage,
+                            slug: p.slug
+                        };
+                    }));
+                } else {
+                    setSearchResults([]);
+                }
+                setIsLoading(false);
+            } else {
+                setSearchResults([]);
+            }
+        }, 500);
+
+        return () => clearTimeout(delayDebounceFn);
+    }, [searchQuery]);
+
 
     // Clear search when modal closes
     useEffect(() => {
@@ -82,7 +102,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                                             type="text"
                                             placeholder="Search for products (e.g. 'Sony', 'Fridge')..."
                                             value={searchQuery}
-                                            onChange={(e) => handleSearch(e.target.value)}
+                                            onChange={(e) => setSearchQuery(e.target.value)}
                                             className="flex-1 text-lg outline-none placeholder:text-gray-400"
                                             autoFocus
                                         />
@@ -110,7 +130,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                                                     {['Samsung', 'LG Refrigerator', 'Washing Machine', 'Inverter AC'].map((term) => (
                                                         <button
                                                             key={term}
-                                                            onClick={() => handleSearch(term)}
+                                                            onClick={() => setSearchQuery(term)}
                                                             className="px-4 py-2 bg-gray-100 hover:bg-primary-50 hover:text-primary-600 rounded-full text-sm transition-colors"
                                                         >
                                                             {term}
@@ -121,13 +141,19 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                                         </div>
                                     )}
 
-                                    {searchQuery.length > 0 && searchResults.length === 0 && (
+                                    {isLoading && (
+                                        <div className="p-8 text-center text-gray-500">
+                                            Searching...
+                                        </div>
+                                    )}
+
+                                    {!isLoading && searchQuery.length > 0 && searchResults.length === 0 && (
                                         <div className="p-8 text-center">
                                             <p className="text-gray-500">No results found for "{searchQuery}"</p>
                                         </div>
                                     )}
 
-                                    {searchResults.length > 0 && (
+                                    {!isLoading && searchResults.length > 0 && (
                                         <div className="p-4 space-y-2">
                                             {searchResults.map((product) => (
                                                 <Link
@@ -136,16 +162,24 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                                                     onClick={onClose}
                                                     className="flex items-center gap-4 p-3 hover:bg-gray-50 rounded-lg transition-colors group"
                                                 >
-                                                    <div className="w-16 h-16 bg-gray-100 rounded-lg flex-shrink-0 relative overflow-hidden">
-                                                        {/* Placeholder image logic since we're using strings */}
-                                                        {/* <Image src={product.image} fill className="object-contain" /> */}
-                                                        <div className="w-full h-full flex items-center justify-center text-2xl">📦</div>
+                                                    <div className="w-16 h-16 bg-gray-100 rounded-lg flex-shrink-0 relative overflow-hidden flex items-center justify-center">
+                                                        {product.image ? (
+                                                            <Image
+                                                                src={product.image}
+                                                                alt={product.name}
+                                                                fill
+                                                                className="object-cover"
+                                                                sizes="64px"
+                                                            />
+                                                        ) : (
+                                                            <div className="text-2xl">📦</div>
+                                                        )}
                                                     </div>
                                                     <div className="flex-1">
                                                         <h3 className="font-medium text-gray-900 group-hover:text-primary-600 transition-colors">{product.name}</h3>
                                                         <div className="flex items-center gap-2 mt-1">
                                                             <span className="text-sm text-primary-600 font-bold">
-                                                                Rs. {product.price.toLocaleString()}
+                                                                Rs. {product.price?.toLocaleString()}
                                                             </span>
                                                         </div>
                                                     </div>

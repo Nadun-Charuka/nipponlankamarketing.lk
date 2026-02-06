@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use } from 'react';
 import { notFound } from 'next/navigation';
 import { FiFilter } from 'react-icons/fi';
 import toast from 'react-hot-toast';
@@ -9,13 +9,14 @@ import { ProductFilters, ProductSort, ProductCard, ProductCardMobile, QuickViewM
 import { Product } from '@/shared/types/database';
 
 interface CategoryPageProps {
-    params: {
+    params: Promise<{
         slug: string;
-    };
+    }>;
 }
 
 export default function CategoryPage({ params }: CategoryPageProps) {
-    const { slug } = params;
+    // Unwrap params Promise (Next.js 15 requirement)
+    const { slug } = use(params);
     const categoryId = slug;
 
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
@@ -27,9 +28,8 @@ export default function CategoryPage({ params }: CategoryPageProps) {
     const [loading, setLoading] = useState(true);
     const [categoryTitle, setCategoryTitle] = useState('');
 
-    // Filter State
+    // Filter State (no category filter needed - already filtered by slug)
     const [activeFilters, setActiveFilters] = useState({
-        category: [categoryId] as string[],
         brand: [] as string[],
         priceRange: { min: '' as number | '', max: '' as number | '' },
         stock: [] as string[],
@@ -38,6 +38,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
     // 1. Fetch Products for Category
     useEffect(() => {
         async function fetchCategoryProducts() {
+            console.log('🔍 Fetching products for category:', categoryId);
             setLoading(true);
             const { data, error } = await supabase
                 .from('products')
@@ -47,9 +48,10 @@ export default function CategoryPage({ params }: CategoryPageProps) {
                 .order('created_at', { ascending: false });
 
             if (error) {
-                console.error('Error fetching category products:', error);
+                console.error('❌ Error fetching category products:', error);
                 toast.error('Failed to load products');
             } else {
+                console.log(`✅ Found ${data?.length || 0} products for category "${categoryId}":`, data);
                 setProducts(data || []);
                 setFilteredProducts(data || []);
             }
@@ -115,6 +117,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
                     setMobileFiltersOpen={setMobileFiltersOpen}
                     activeFilters={activeFilters}
                     onFilterChange={setActiveFilters}
+                    hideCategoryFilter={true}
                     mode="mobile"
                 />
 
@@ -161,6 +164,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
                                     setMobileFiltersOpen={() => { }}
                                     activeFilters={activeFilters}
                                     onFilterChange={setActiveFilters}
+                                    hideCategoryFilter={true}
                                     mode="desktop"
                                 />
                             </div>

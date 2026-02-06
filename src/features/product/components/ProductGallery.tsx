@@ -24,7 +24,10 @@ export function ProductGallery({ images = [], featuredImage, productName }: Prod
     const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);
 
     // Combine featured image with gallery images if available
-    const allImages = featuredImage ? [featuredImage, ...images] : images;
+    const rawImages = featuredImage ? [featuredImage, ...images] : images;
+
+    // SANITIZE: Filter out known invalid paths (allow only http/https)
+    const allImages = rawImages.filter(img => img && (img.startsWith('http') || img.startsWith('https')));
 
     // Fallback if no images
     if (allImages.length === 0) {

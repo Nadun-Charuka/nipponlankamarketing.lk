@@ -7,36 +7,37 @@ interface MegaMenuProps {
     categoryId: string;
 }
 
-// Mock data - will be replaced with Supabase data later
+// Mock data - These subcategory links are placeholders
+// In a real implementation, these would filter products on the category page
 const megaMenuData: Record<string, any> = {
     televisions: {
         columns: [
             {
                 title: 'By Size',
                 links: [
-                    { label: '32" TVs', href: '/category/televisions/32-inch' },
-                    { label: '43" TVs', href: '/category/televisions/43-inch' },
-                    { label: '55" TVs', href: '/category/televisions/55-inch' },
-                    { label: '65" TVs', href: '/category/televisions/65-inch' },
-                    { label: '75" TVs', href: '/category/televisions/75-inch' },
+                    { label: '32" TVs', href: '/category/televisions' },
+                    { label: '43" TVs', href: '/category/televisions' },
+                    { label: '55" TVs', href: '/category/televisions' },
+                    { label: '65" TVs', href: '/category/televisions' },
+                    { label: '75" TVs', href: '/category/televisions' },
                 ],
             },
             {
                 title: 'By Brand',
                 links: [
-                    { label: 'Samsung', href: '/category/televisions/samsung' },
-                    { label: 'LG', href: '/category/televisions/lg' },
-                    { label: 'Sony', href: '/category/televisions/sony' },
-                    { label: 'Panasonic', href: '/category/televisions/panasonic' },
+                    { label: 'Samsung', href: '/category/televisions' },
+                    { label: 'LG', href: '/category/televisions' },
+                    { label: 'Sony', href: '/category/televisions' },
+                    { label: 'Panasonic', href: '/category/televisions' },
                 ],
             },
             {
                 title: 'By Type',
                 links: [
-                    { label: '4K Ultra HD', href: '/category/televisions/4k' },
-                    { label: 'Smart TV', href: '/category/televisions/smart' },
-                    { label: 'OLED', href: '/category/televisions/oled' },
-                    { label: 'QLED', href: '/category/televisions/qled' },
+                    { label: '4K Ultra HD', href: '/category/televisions' },
+                    { label: 'Smart TV', href: '/category/televisions' },
+                    { label: 'OLED', href: '/category/televisions' },
+                    { label: 'QLED', href: '/category/televisions' },
                 ],
             },
         ],
@@ -46,27 +47,27 @@ const megaMenuData: Record<string, any> = {
             {
                 title: 'By Type',
                 links: [
-                    { label: 'Single Door', href: '/category/refrigerators/single-door' },
-                    { label: 'Double Door', href: '/category/refrigerators/double-door' },
-                    { label: 'Side by Side', href: '/category/refrigerators/side-by-side' },
-                    { label: 'French Door', href: '/category/refrigerators/french-door' },
+                    { label: 'Single Door', href: '/category/refrigerators' },
+                    { label: 'Double Door', href: '/category/refrigerators' },
+                    { label: 'Side by Side', href: '/category/refrigerators' },
+                    { label: 'French Door', href: '/category/refrigerators' },
                 ],
             },
             {
                 title: 'By Capacity',
                 links: [
-                    { label: 'Under 200L', href: '/category/refrigerators/under-200l' },
-                    { label: '200L - 400L', href: '/category/refrigerators/200-400l' },
-                    { label: '400L - 600L', href: '/category/refrigerators/400-600l' },
-                    { label: 'Above 600L', href: '/category/refrigerators/above-600l' },
+                    { label: 'Under 200L', href: '/category/refrigerators' },
+                    { label: '200L - 400L', href: '/category/refrigerators' },
+                    { label: '400L - 600L', href: '/category/refrigerators' },
+                    { label: 'Above 600L', href: '/category/refrigerators' },
                 ],
             },
             {
                 title: 'By Brand',
                 links: [
-                    { label: 'LG', href: '/category/refrigerators/lg' },
-                    { label: 'Samsung', href: '/category/refrigerators/samsung' },
-                    { label: 'Panasonic', href: '/category/refrigerators/panasonic' },
+                    { label: 'LG', href: '/category/refrigerators' },
+                    { label: 'Samsung', href: '/category/refrigerators' },
+                    { label: 'Panasonic', href: '/category/refrigerators' },
                 ],
             },
         ],
@@ -76,26 +77,26 @@ const megaMenuData: Record<string, any> = {
             {
                 title: 'By Type',
                 links: [
-                    { label: 'Front Load', href: '/category/washing-machines/front-load' },
-                    { label: 'Top Load', href: '/category/washing-machines/top-load' },
-                    { label: 'Semi-Automatic', href: '/category/washing-machines/semi-automatic' },
+                    { label: 'Front Load', href: '/category/washing-machines' },
+                    { label: 'Top Load', href: '/category/washing-machines' },
+                    { label: 'Semi-Automatic', href: '/category/washing-machines' },
                 ],
             },
             {
                 title: 'By Capacity',
                 links: [
-                    { label: '6kg', href: '/category/washing-machines/6kg' },
-                    { label: '7kg', href: '/category/washing-machines/7kg' },
-                    { label: '8kg', href: '/category/washing-machines/8kg' },
-                    { label: '9kg+', href: '/category/washing-machines/9kg-plus' },
+                    { label: '6kg', href: '/category/washing-machines' },
+                    { label: '7kg', href: '/category/washing-machines' },
+                    { label: '8kg', href: '/category/washing-machines' },
+                    { label: '9kg+', href: '/category/washing-machines' },
                 ],
             },
             {
                 title: 'By Brand',
                 links: [
-                    { label: 'Abans', href: '/category/washing-machines/abans' },
-                    { label: 'LG', href: '/category/washing-machines/lg' },
-                    { label: 'Samsung', href: '/category/washing-machines/samsung' },
+                    { label: 'Abans', href: '/category/washing-machines' },
+                    { label: 'LG', href: '/category/washing-machines' },
+                    { label: 'Samsung', href: '/category/washing-machines' },
                 ],
             },
         ],
@@ -140,7 +141,7 @@ export function MegaMenu({ categoryId }: MegaMenuProps) {
                         href={`/category/${categoryId}`}
                         className="text-primary-600 hover:text-primary-700 font-semibold text-sm inline-flex items-center gap-2"
                     >
-                        View All {categoryId.replace('-', ' ')}
+                        View All {categoryId.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                         <span>→</span>
                     </Link>
                 </div>

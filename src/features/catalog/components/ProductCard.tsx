@@ -57,7 +57,7 @@ export function ProductCard({ product, onQuickView, onAddToWishlist }: ProductCa
             <Link href={`/products/${product.slug}`} className="relative aspect-square bg-white border-b border-gray-100 overflow-hidden">
                 {/* Placeholder Image */}
                 <div className="w-full h-full flex items-center justify-center bg-gray-50 group-hover:scale-105 transition-transform duration-300">
-                    {product.featured_image ? (
+                    {product.featured_image && (product.featured_image.startsWith('http') || product.featured_image.startsWith('https')) ? (
                         <Image
                             src={product.featured_image}
                             alt={product.name}

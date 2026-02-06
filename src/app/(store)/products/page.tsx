@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { FiFilter } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import { useSearchParams } from 'next/navigation';
-import { ProductFilters, ProductSort, ProductCard, ProductCardMobile, QuickViewModal } from '@/features/catalog/components';
+import { ProductFilters, ProductSort, ProductCard, ProductCardMobile, QuickViewModal, FilterState } from '@/features/catalog/components';
 import { Product } from '@/shared/types/database';
 import { supabase } from '@/shared/lib/supabase';
 
@@ -21,7 +21,7 @@ export default function ProductsPage() {
     const [isLoading, setIsLoading] = useState(true);
 
     // Filter State
-    const [activeFilters, setActiveFilters] = useState({
+    const [activeFilters, setActiveFilters] = useState<FilterState>({
         category: [] as string[],
         brand: [] as string[],
         priceRange: { min: '' as number | '', max: '' as number | '' },
@@ -56,23 +56,27 @@ export default function ProductsPage() {
 
         // Filter by Search Query
         if (searchQuery) {
-            const query = searchQuery.toLowerCase();
-            results = results.filter(p =>
-                p.name.toLowerCase().includes(query) ||
-                p.description?.toLowerCase().includes(query) ||
-                p.category_id?.toLowerCase().includes(query)
-            );
+            const queryTerms = searchQuery.toLowerCase().replace(/-/g, ' ').split(' ').filter(Boolean);
+            results = results.filter(p => {
+                const name = p.name?.toLowerCase() || '';
+                const description = p.description?.toLowerCase() || '';
+                const category = p.category_id?.toLowerCase().replace(/-/g, ' ') || '';
+
+                return queryTerms.every(term =>
+                    name.includes(term) || description.includes(term) || category.includes(term)
+                );
+            });
         }
 
         // Filter by Category
-        if (activeFilters.category.length > 0) {
-            results = results.filter(p => p.category_id && activeFilters.category.includes(p.category_id));
+        if (activeFilters.category && activeFilters.category.length > 0) {
+            results = results.filter(p => p.category_id && activeFilters.category!.includes(p.category_id));
         }
 
         // Filter by Brand (Mock logic: checking if name contains brand)
         if (activeFilters.brand.length > 0) {
             results = results.filter(p => {
-                const brandMatch = activeFilters.brand.some(brand =>
+                const brandMatch = activeFilters.brand.some((brand: string) =>
                     p.name.toLowerCase().includes(brand.toLowerCase())
                 );
                 return brandMatch;

@@ -5,7 +5,7 @@ import { Dialog, Disclosure, Transition } from '@headlessui/react';
 import { FiX, FiMinus, FiPlus, FiFilter } from 'react-icons/fi';
 
 export interface FilterState {
-    category: string[];
+    category?: string[];
     brand: string[];
     priceRange: { min: number | ''; max: number | '' };
     stock: string[];
@@ -16,6 +16,7 @@ interface ProductFiltersProps {
     setMobileFiltersOpen: (open: boolean) => void;
     activeFilters: FilterState;
     onFilterChange: (filters: FilterState) => void;
+    hideCategoryFilter?: boolean;
 }
 
 const filtersDef = [
@@ -60,10 +61,15 @@ const filtersDef = [
     },
 ];
 
-export function ProductFilters({ mobileFiltersOpen, setMobileFiltersOpen, activeFilters, onFilterChange, mode = 'both' }: ProductFiltersProps & { mode?: 'mobile' | 'desktop' | 'both' }) {
+export function ProductFilters({ mobileFiltersOpen, setMobileFiltersOpen, activeFilters, onFilterChange, hideCategoryFilter = false, mode = 'both' }: ProductFiltersProps & { mode?: 'mobile' | 'desktop' | 'both' }) {
+
+    // Filter out category section if we're on a category-specific page
+    const visibleFilters = hideCategoryFilter
+        ? filtersDef.filter(section => section.id !== 'category')
+        : filtersDef;
 
     const handleCheckboxChange = (sectionId: keyof FilterState, value: string, checked: boolean) => {
-        const currentValues = activeFilters[sectionId] as string[];
+        const currentValues = (activeFilters[sectionId] as string[] | undefined) || [];
         const newValues = checked
             ? [...currentValues, value]
             : currentValues.filter((v) => v !== value);
@@ -126,7 +132,7 @@ export function ProductFilters({ mobileFiltersOpen, setMobileFiltersOpen, active
                                     {/* Scrollable Content */}
                                     <div className="flex-1 overflow-y-auto px-6 py-4">
                                         <form className="space-y-6">
-                                            {filtersDef.map((section) => (
+                                            {visibleFilters.map((section) => (
                                                 <div key={section.id} className="border-b border-gray-100 pb-6 last:border-0 last:pb-0">
                                                     <h3 className="text-sm font-medium text-gray-900 mb-4 uppercase tracking-wider">
                                                         {section.name}
@@ -148,7 +154,7 @@ export function ProductFilters({ mobileFiltersOpen, setMobileFiltersOpen, active
                                                                             name={`${section.id}[]`}
                                                                             defaultValue={option.value}
                                                                             type="checkbox"
-                                                                            checked={(activeFilters[section.id as keyof FilterState] as string[]).includes(option.value)}
+                                                                            checked={((activeFilters[section.id as keyof FilterState] as string[] | undefined) || []).includes(option.value)}
                                                                             onChange={(e) => handleCheckboxChange(section.id as keyof FilterState, option.value, e.target.checked)}
                                                                             className="h-5 w-5 rounded border-gray-300 text-primary-600 focus:ring-primary-500 cursor-pointer"
                                                                         />
@@ -196,7 +202,7 @@ export function ProductFilters({ mobileFiltersOpen, setMobileFiltersOpen, active
             {(mode === 'desktop' || mode === 'both') && (
                 <div className="hidden lg:block">
                     <form className="space-y-10 divide-y divide-gray-200">
-                        {filtersDef.map((section, sectionIdx) => (
+                        {visibleFilters.map((section, sectionIdx) => (
                             <div key={section.id} className={sectionIdx === 0 ? '' : 'pt-10'}>
                                 <fieldset>
                                     <legend className="block text-sm font-medium text-gray-900">{section.name}</legend>
@@ -215,7 +221,7 @@ export function ProductFilters({ mobileFiltersOpen, setMobileFiltersOpen, active
                                                         name={`${section.id}[]`}
                                                         defaultValue={option.value}
                                                         type="checkbox"
-                                                        checked={(activeFilters[section.id as keyof FilterState] as string[]).includes(option.value)}
+                                                        checked={((activeFilters[section.id as keyof FilterState] as string[] | undefined) || []).includes(option.value)}
                                                         onChange={(e) => handleCheckboxChange(section.id as keyof FilterState, option.value, e.target.checked)}
                                                         className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 cursor-pointer"
                                                     />

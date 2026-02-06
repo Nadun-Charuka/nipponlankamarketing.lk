@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { FiHeart } from 'react-icons/fi';
 import { Product } from '@/shared/types/database';
 
@@ -53,7 +54,17 @@ export function ProductCardMobile({ product, onAddToWishlist }: ProductCardMobil
 
                 {/* Placeholder Image */}
                 <div className="w-full h-full flex items-center justify-center text-4xl">
-                    📦
+                    {product.featured_image && (product.featured_image.startsWith('http') || product.featured_image.startsWith('https')) ? (
+                        <Image
+                            src={product.featured_image}
+                            alt={product.name}
+                            fill
+                            className="object-cover"
+                            sizes="100px" // Mobile has small images
+                        />
+                    ) : (
+                        '📦'
+                    )}
                 </div>
             </div>
 
