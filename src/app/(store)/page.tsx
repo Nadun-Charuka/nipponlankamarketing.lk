@@ -1,12 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Script from 'next/script';
 import toast from 'react-hot-toast';
 import { HeroSlider } from '@/features/hero/components';
 import { ProductCarousel, QuickViewModal } from '@/features/catalog/components';
-import { PromoBanners, BrandShowcase, Testimonials, Newsletter } from '@/features/marketing/components';
+import { PromoBanners, BrandShowcase, Testimonials } from '@/features/marketing/components';
+import { CompanyStories } from '@/features/stories/components';
 import { WhatsAppFAB } from '@/features/whatsapp/components/WhatsAppFAB';
+import { LocationMap } from '@/features/location/components';
 import { Product } from '@/shared/types/database';
 import { supabase } from '@/shared/lib/supabase';
 import { generateLocalBusinessSchema } from '@/shared/lib/seo';
@@ -47,7 +48,7 @@ export default function HomePage() {
   return (
     <>
       {/* Local Business Schema for SEO */}
-      <Script
+      <script
         id="local-business-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -162,8 +163,11 @@ export default function HomePage() {
         {/* Testimonials */}
         <Testimonials />
 
-        {/* Newsletter */}
-        <Newsletter />
+        {/* Location Map */}
+        <LocationMap />
+
+        {/* Company Stories */}
+        <CompanyStories />
       </main>
 
       {/* Quick View Modal */}

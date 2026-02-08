@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { FiHome, FiBox, FiShoppingBag, FiSettings, FiUsers, FiLogOut, FiGrid, FiImage } from 'react-icons/fi';
+import { FiHome, FiBox, FiShoppingBag, FiSettings, FiUsers, FiLogOut, FiGrid, FiImage, FiFileText } from 'react-icons/fi';
 import { useAdminAuth } from '../hooks/useAdminAuth';
 
 const navigation = [
@@ -10,6 +10,7 @@ const navigation = [
     { name: 'Products', href: '/admin/products', icon: FiBox },
     { name: 'Categories', href: '/admin/categories', icon: FiGrid },
     { name: 'Hero Items', href: '/admin/hero-items', icon: FiImage },
+    { name: 'Stories', href: '/admin/stories', icon: FiFileText },
     // Orders, Customers, Settings hidden for Phase 1 as requested
 ];
 
@@ -20,8 +21,8 @@ export function AdminSidebar() {
     return (
         <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0 border-r border-gray-200 bg-white">
             {/* Logo */}
-            <div className="flex items-center h-16 flex-shrink-0 px-6 border-b border-gray-100 bg-white">
-                <Link href="/" className="flex items-center gap-3">
+            <div className="flex items-center justify-between h-16 flex-shrink-0 px-6 border-b border-gray-100 bg-white">
+                <Link href="/admin" className="flex items-center gap-3">
                     <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center transform rotate-3">
                         <span className="text-white font-display font-bold text-xl transform -rotate-3">N</span>
                     </div>
@@ -29,6 +30,16 @@ export function AdminSidebar() {
                         <span className="font-display font-bold text-xl text-gray-900 leading-none block">Nippon</span>
                         <span className="text-[10px] text-gray-500 uppercase tracking-widest font-medium">Admin Panel</span>
                     </div>
+                </Link>
+                <Link
+                    href="/"
+                    target="_blank"
+                    className="text-xs text-gray-500 hover:text-primary-600 transition-colors flex items-center gap-1"
+                    title="View Website"
+                >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
                 </Link>
             </div>
 

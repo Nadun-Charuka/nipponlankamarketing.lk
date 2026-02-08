@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import Script from 'next/script';
 import { createClient } from '@supabase/supabase-js';
 import { ProductGallery, ProductInfo, ProductTabs } from '@/features/product/components';
 import { Product } from '@/shared/types/database';
@@ -12,7 +11,9 @@ import {
 } from '@/shared/lib/seo';
 
 // Generate metadata for SEO
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+    const { slug } = await params;
+
     const supabase = createClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -21,7 +22,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     const { data: product } = await supabase
         .from('products')
         .select('*')
-        .eq('slug', params.slug)
+        .eq('slug', slug)
         .single();
 
     if (!product) {
@@ -61,7 +62,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     };
 }
 
-export default async function ProductDetailPage({ params }: { params: { slug: string } }) {
+export default async function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params;
+
     const supabase = createClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -70,7 +73,7 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
     const { data: product, error } = await supabase
         .from('products')
         .select('*')
-        .eq('slug', params.slug)
+        .eq('slug', slug)
         .single();
 
     if (error || !product) {
@@ -91,7 +94,7 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
     return (
         <>
             {/* Product Schema for SEO */}
-            <Script
+            <script
                 id="product-schema"
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
@@ -100,7 +103,7 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
             />
 
             {/* Breadcrumb Schema for SEO */}
-            <Script
+            <script
                 id="breadcrumb-schema"
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{

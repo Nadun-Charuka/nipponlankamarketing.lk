@@ -61,5 +61,30 @@ export interface AdminUser {
   created_at: string;
 }
 
+export interface HeroItem {
+  id: string;
+  title: string;
+  subtitle: string;
+  image_url: string;
+  cta_text: string;
+  cta_link: string;
+  display_order: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CompanyStory {
+  id: string;
+  title: string;
+  description: string;
+  image_url: string;
+  category: 'charity' | 'delivery' | 'team' | 'community' | 'event';
+  is_featured: boolean;
+  display_order: number;
+  created_at: string;
+  updated_at: string;
+}
+
 export type StockStatus = 'in_stock' | 'out_of_stock' | 'pre_order';
 export type PaymentPlan = 'cash' | 'installment';
