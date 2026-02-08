@@ -17,19 +17,60 @@ const outfit = Outfit({
 
 export const metadata: Metadata = {
   title: {
-    default: "Nippon Lanka Marketing - Home Appliances & Furniture on Easy Installments",
+    default: "Nippon Lanka Marketing - Home Appliances & Furniture on Easy Installments | Sri Lanka",
     template: "%s | Nippon Lanka Marketing",
   },
-  description: "Buy premium home appliances and furniture with easy in-house installments. No credit card required. Free delivery in Western Province (Colombo, Gampaha, Kalutara).",
+  description: "Buy premium home appliances and furniture with easy in-house installments in Sri Lanka. No credit card required. Free delivery in Western Province (Colombo, Gampaha, Kalutara). TVs, refrigerators, washing machines, air conditioners at best prices.",
   keywords: [
+    // General
     "home appliances Sri Lanka",
-    "furniture installments",
-    "no credit card",
+    "furniture installments Sri Lanka",
+    "no credit card installments",
     "free delivery Colombo",
-    "Western Province",
-    "TVs installments",
-    "refrigerators Colombo",
-    "washing machines",
+    "Western Province delivery",
+
+    // TV Keywords
+    "TV price in Sri Lanka",
+    "television installment plans",
+    "Singer TV price",
+    "Samsung TV Sri Lanka",
+    "Sony TV installment",
+    "LG TV price Colombo",
+    "smart TV Sri Lanka",
+
+    // Refrigerator Keywords
+    "fridge price in Sri Lanka",
+    "refrigerator installment",
+    "LG refrigerator Sri Lanka",
+    "Samsung fridge price",
+    "double door fridge Colombo",
+
+    // Washing Machine Keywords
+    "washing machine price Sri Lanka",
+    "washing machine installment",
+    "front load washer Colombo",
+    "Abans washing machine",
+
+    // Air Conditioner Keywords
+    "air conditioner price Sri Lanka",
+    "AC installment plans",
+    "Panasonic AC Sri Lanka",
+    "inverter AC Colombo",
+
+    // Furniture Keywords
+    "furniture installments Colombo",
+    "sofa set price Sri Lanka",
+    "Damro furniture installment",
+
+    // Location-based
+    "home appliances Colombo",
+    "furniture Gampaha",
+    "appliances Kalutara",
+
+    // Payment & Service
+    "easy installment plans",
+    "low price home appliances",
+    "installment options Sri Lanka",
   ],
   authors: [{ name: "Nippon Lanka Marketing" }],
   creator: "Nippon Lanka Marketing",
@@ -38,13 +79,13 @@ export const metadata: Metadata = {
     locale: "en_LK",
     url: process.env.NEXT_PUBLIC_SITE_URL,
     siteName: "Nippon Lanka Marketing",
-    title: "Nippon Lanka Marketing - Easy Installments on Home Appliances",
-    description: "Premium home appliances and furniture with in-house installments. No credit card needed.",
+    title: "Nippon Lanka Marketing - Easy Installments on Home Appliances in Sri Lanka",
+    description: "Buy TVs, refrigerators, washing machines, air conditioners & furniture with easy in-house installments. No credit card needed. Free delivery in Colombo, Gampaha & Kalutara.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Nippon Lanka Marketing",
-    description: "Easy installments on home appliances. No credit card required.",
+    title: "Nippon Lanka Marketing - Home Appliances Sri Lanka",
+    description: "Easy installments on TVs, fridges, washing machines & more. No credit card required. Free delivery in Western Province.",
   },
   robots: {
     index: true,
@@ -56,6 +97,9 @@ export const metadata: Metadata = {
       "max-image-preview": "large",
       "max-snippet": -1,
     },
+  },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
   },
 };
 

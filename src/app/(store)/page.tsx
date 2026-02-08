@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Script from 'next/script';
 import toast from 'react-hot-toast';
 import { HeroSlider } from '@/features/hero/components';
 import { ProductCarousel, QuickViewModal } from '@/features/catalog/components';
@@ -8,6 +9,7 @@ import { PromoBanners, BrandShowcase, Testimonials, Newsletter } from '@/feature
 import { WhatsAppFAB } from '@/features/whatsapp/components/WhatsAppFAB';
 import { Product } from '@/shared/types/database';
 import { supabase } from '@/shared/lib/supabase';
+import { generateLocalBusinessSchema } from '@/shared/lib/seo';
 
 export default function HomePage() {
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
@@ -44,6 +46,15 @@ export default function HomePage() {
 
   return (
     <>
+      {/* Local Business Schema for SEO */}
+      <Script
+        id="local-business-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(generateLocalBusinessSchema()),
+        }}
+      />
+
       <main>
         {/* Hero Slider */}
         <HeroSlider />
