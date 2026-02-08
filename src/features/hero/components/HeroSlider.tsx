@@ -101,9 +101,9 @@ export function HeroSlider() {
                             <SwiperSlide key={product.id}>
                                 {/* Desktop Layout (Hidden on Mobile) */}
                                 <div className="hidden md:block bg-white">
-                                    <div className="grid grid-cols-2 gap-6 items-center min-h-[320px] px-12">
+                                    <div className="grid grid-cols-2 gap-2 items-center min-h-[320px] px-12">
                                         {/* Content Side */}
-                                        <div className="order-1 flex flex-col justify-center items-start z-10 py-8">
+                                        <div className="order-1 flex flex-col justify-center items-start z-10 py-8 animate-fadeInUp">
                                             {/* Badge */}
                                             {badge && (
                                                 <span className="inline-block px-3 py-1 bg-accent-red text-white text-[10px] font-bold uppercase tracking-wider rounded mb-3">
@@ -112,8 +112,10 @@ export function HeroSlider() {
                                             )}
 
                                             {/* Title */}
-                                            <h2 className="text-4xl font-display font-bold text-gray-900 leading-tight mb-2">
-                                                SPECIAL OFFER
+                                            <h2 className="text-4xl font-display font-bold leading-tight mb-2">
+                                                <span className="bg-gradient-to-r from-gray-900 via-purple-900 to-gray-900 bg-clip-text text-transparent">
+                                                    SPECIAL OFFER
+                                                </span>
                                             </h2>
                                             <p className="text-base text-gray-600 mb-4 font-medium">Premium Quality Products</p>
 
@@ -147,13 +149,13 @@ export function HeroSlider() {
                                         </div>
 
                                         {/* Image Side */}
-                                        <div className="order-2 relative h-full flex items-center justify-center py-6">
-                                            <div className="relative w-full h-[280px] flex items-center justify-center bg-gradient-to-br from-primary-50 to-white rounded-2xl overflow-hidden">
+                                        <div className="order-2 relative h-full flex items-center justify-center py-6 animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
+                                            <div className="relative w-full h-[280px] flex items-center justify-center bg-gradient-to-br from-purple-50 via-primary-50 to-white rounded-2xl overflow-hidden">
                                                 {product.featured_image ? (
                                                     <img
                                                         src={product.featured_image}
                                                         alt={product.name}
-                                                        className="w-full h-full object-contain p-4"
+                                                        className="w-full h-full object-contain p-4 transition-transform duration-500 hover:scale-105"
                                                         onError={(e) => {
                                                             // Fallback to placeholder if image fails to load
                                                             e.currentTarget.style.display = 'none';
@@ -177,7 +179,7 @@ export function HeroSlider() {
                                 {/* Mobile Layout (Hidden on Desktop) */}
                                 <div className="block md:hidden bg-white pb-6">
                                     {/* Mobile Image Section */}
-                                    <div className="relative w-full h-[200px] bg-gradient-to-b from-primary-50 to-white flex items-center justify-center mb-4 overflow-hidden">
+                                    <div className="relative w-full h-[200px] bg-gradient-to-b from-purple-50 via-primary-50 to-white flex items-center justify-center mb-4 overflow-hidden">
                                         {badge && (
                                             <span className="absolute top-4 left-4 px-2 py-1 bg-accent-red text-white text-[10px] font-bold uppercase tracking-wider rounded shadow-sm z-10">
                                                 {badge}
@@ -243,6 +245,21 @@ export function HeroSlider() {
 
             {/* Custom Swiper Styles */}
             <style jsx global>{`
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        .animate-fadeInUp {
+          animation: fadeInUp 0.6s ease-out forwards;
+        }
+        
         .hero-swiper .swiper-button-next,
         .hero-swiper .swiper-button-prev {
           color: #4C1D95; /* primary-900 */
