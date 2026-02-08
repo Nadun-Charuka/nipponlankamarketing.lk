@@ -56,7 +56,11 @@ export default function CategoriesPage() {
             .eq('id', id);
 
         if (error) {
-            toast.error('Failed to delete category');
+            if (error.code === '23503') { // Foreign key violation
+                toast.error('Cannot delete: This category contains products. Please delete or move them first.');
+            } else {
+                toast.error('Failed to delete category');
+            }
             console.error(error);
         } else {
             toast.success('Category deleted successfully');

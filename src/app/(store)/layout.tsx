@@ -9,7 +9,9 @@ export default function StoreLayout({
         <>
             <TopBar />
             <MainNav />
-            {children}
+            <main className="flex-grow">
+                {children}
+            </main>
             <Footer />
         </>
     );

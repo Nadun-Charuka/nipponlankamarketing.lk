@@ -103,40 +103,48 @@ export const metadata: Metadata = {
   },
 };
 
+import { CartProvider } from '@/features/cart/context/CartContext';
+import { CartDrawer } from '@/features/cart/components/CartDrawer';
+import { WishlistProvider } from '@/features/wishlist/context/WishlistContext';
+
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en" className={`${inter.variable} ${outfit.variable}`}>
-      <body className="antialiased">
-        {children}
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            duration: 3000,
-            style: {
-              background: '#fff',
-              color: '#1E293B',
-              boxShadow: '0 8px 32px 0 rgba(168, 85, 247, 0.1)',
-            },
-            success: {
-              iconTheme: {
-                primary: '#10B981',
-                secondary: '#fff',
-              },
-            },
-            error: {
-              iconTheme: {
-                primary: '#EF4444',
-                secondary: '#fff',
-              },
-            },
-          }}
-        />
+      <body className="antialiased font-sans text-gray-900 bg-gray-50 flex flex-col min-h-screen">
+        <CartProvider>
+          <WishlistProvider>
+            <Toaster
+              position="top-right"
+              toastOptions={{
+                duration: 3000,
+                style: {
+                  background: '#fff',
+                  color: '#1E293B',
+                  boxShadow: '0 8px 32px 0 rgba(168, 85, 247, 0.1)',
+                },
+                success: {
+                  iconTheme: {
+                    primary: '#10B981',
+                    secondary: '#fff',
+                  },
+                },
+                error: {
+                  iconTheme: {
+                    primary: '#EF4444',
+                    secondary: '#fff',
+                  },
+                },
+              }}
+            />
+            {children}
+            <CartDrawer />
+          </WishlistProvider>
+        </CartProvider>
       </body>
     </html>
   );
 }
-

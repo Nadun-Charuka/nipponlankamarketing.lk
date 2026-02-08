@@ -3,10 +3,12 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { FiSearch, FiMenu, FiShoppingCart, FiGrid } from 'react-icons/fi';
+import { FiSearch, FiMenu, FiShoppingCart, FiGrid, FiHeart } from 'react-icons/fi';
 import { MobileMenu } from './MobileMenu';
 import { supabase } from '@/shared/lib/supabase';
 import { getIconComponent } from '@/shared/utils/iconMapper';
+import { useCart } from '@/features/cart/context/CartContext';
+import { useWishlist } from '@/features/wishlist/context/WishlistContext';
 
 interface Category {
     id: string;
@@ -17,6 +19,8 @@ interface Category {
 
 export function MainNav() {
     const router = useRouter();
+    const { itemCount, setIsCartOpen } = useCart();
+    const { wishlistCount } = useWishlist();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
     const [categories, setCategories] = useState<Category[]>([]);
@@ -226,18 +230,35 @@ export function MainNav() {
 
                         {/* Action Icons */}
                         <div className="flex items-center gap-2 flex-shrink-0">
-                            {/* Cart Icon */}
+                            {/* Wishlist Icon */}
                             <Link
-                                href="/cart"
+                                href="/wishlist"
+                                className="p-2 hover:bg-gray-100 rounded-lg transition-colors relative"
+                                aria-label="Wishlist"
+                            >
+                                <FiHeart className="w-5 h-5 text-gray-700" />
+                                {wishlistCount > 0 && (
+                                    <span className="absolute -top-1 -right-1 bg-accent-red text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-semibold animate-scaleIn">
+                                        {wishlistCount}
+                                    </span>
+                                )}
+                            </Link>
+
+                            {/* Cart Icon */}
+                            {/* Cart Icon */}
+                            <button
+                                onClick={() => setIsCartOpen(true)}
                                 className="p-2 hover:bg-gray-100 rounded-lg transition-colors relative"
                                 aria-label="Shopping Cart"
                             >
                                 <FiShoppingCart className="w-5 h-5 text-gray-700" />
                                 {/* Cart badge */}
-                                <span className="absolute -top-1 -right-1 bg-accent-gold text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-semibold">
-                                    0
-                                </span>
-                            </Link>
+                                {itemCount > 0 && (
+                                    <span className="absolute -top-1 -right-1 bg-accent-gold text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-semibold animate-scaleIn">
+                                        {itemCount}
+                                    </span>
+                                )}
+                            </button>
 
                             {/* Mobile Search Button */}
                             <button

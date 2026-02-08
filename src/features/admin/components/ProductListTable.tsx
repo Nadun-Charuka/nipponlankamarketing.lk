@@ -6,10 +6,51 @@ import Link from 'next/link';
 
 interface ProductListTableProps {
     products: Product[];
+    categories: { id: string; name: string }[];
+    isLoading: boolean;
     onDelete: (id: string) => void;
 }
 
-export function ProductListTable({ products, onDelete }: ProductListTableProps) {
+export function ProductListTable({ products, categories, isLoading, onDelete }: ProductListTableProps) {
+    if (isLoading) {
+        return (
+            <div className="bg-white overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+                <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-300">
+                        <thead className="bg-gray-50">
+                            <tr>
+                                <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Product</th>
+                                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Category</th>
+                                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Price</th>
+                                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Stock</th>
+                                <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6"><span className="sr-only">Actions</span></th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-200 bg-white">
+                            {[...Array(5)].map((_, i) => (
+                                <tr key={i} className="animate-pulse">
+                                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+                                        <div className="flex items-center">
+                                            <div className="h-10 w-10 bg-gray-200 rounded-lg"></div>
+                                            <div className="ml-4 space-y-2">
+                                                <div className="h-4 bg-gray-200 rounded w-32"></div>
+                                                <div className="h-3 bg-gray-200 rounded w-20"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className="whitespace-nowrap px-3 py-4"><div className="h-6 bg-gray-200 rounded-full w-24"></div></td>
+                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><div className="h-4 bg-gray-200 rounded w-16"></div></td>
+                                    <td className="whitespace-nowrap px-3 py-4"><div className="h-6 bg-gray-200 rounded-full w-20"></div></td>
+                                    <td className="whitespace-nowrap px-3 py-4 text-right"><div className="h-8 bg-gray-200 rounded w-16 ml-auto"></div></td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        );
+    }
+
     if (products.length === 0) {
         return (
             <div className="text-center py-12 bg-white rounded-xl border border-gray-200">
@@ -62,7 +103,7 @@ export function ProductListTable({ products, onDelete }: ProductListTableProps) 
                                 </td>
                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                     <span className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800">
-                                        {product.category_id || 'Uncategorized'}
+                                        {categories.find(c => c.id === product.category_id)?.name || 'Uncategorized'}
                                     </span>
                                 </td>
                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
@@ -71,10 +112,10 @@ export function ProductListTable({ products, onDelete }: ProductListTableProps) 
                                 </td>
                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                     <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${product.stock_status === 'in_stock'
-                                            ? 'bg-green-100 text-green-800'
-                                            : product.stock_status === 'out_of_stock'
-                                                ? 'bg-red-100 text-red-800'
-                                                : 'bg-yellow-100 text-yellow-800'
+                                        ? 'bg-green-100 text-green-800'
+                                        : product.stock_status === 'out_of_stock'
+                                            ? 'bg-red-100 text-red-800'
+                                            : 'bg-yellow-100 text-yellow-800'
                                         }`}>
                                         {product.stock_status.replace('_', ' ')}
                                     </span>

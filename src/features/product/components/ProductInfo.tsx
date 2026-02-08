@@ -1,11 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { FiHeart, FiShare2, FiTruck, FiShield, FiCheckCircle } from 'react-icons/fi';
+import { FiHeart, FiShare2, FiTruck, FiShield, FiCheckCircle, FiShoppingCart } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
 import { Product } from '@/shared/types/database';
 import { DualPriceDisplay } from '@/features/pricing/components/DualPriceDisplay';
 import toast from 'react-hot-toast';
+import { useCart } from '@/features/cart/context/CartContext';
+import { useWishlist } from '@/features/wishlist/context/WishlistContext';
 
 interface ProductInfoProps {
     product: Product;
@@ -13,9 +15,16 @@ interface ProductInfoProps {
 
 export function ProductInfo({ product }: ProductInfoProps) {
     const [quantity, setQuantity] = useState(1);
+    const { addToCart } = useCart();
+    const { isInWishlist, toggleWishlist } = useWishlist();
+    const isWishlisted = isInWishlist(product.id);
 
     const handleIncrement = () => setQuantity(q => q + 1);
     const handleDecrement = () => setQuantity(q => Math.max(1, q - 1));
+
+    const handleWishlistClick = () => {
+        toggleWishlist(product);
+    };
 
     const handleWhatsAppClick = () => {
         const message = `Hi, I'm interested in the ${product.name}. Is it available?`;
@@ -24,7 +33,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
     };
 
     const handleBuyNow = () => {
-        toast.success('Added to cart & redirecting to checkout...');
+        addToCart(product, quantity, { openDrawer: true });
     };
 
     return (
@@ -59,46 +68,73 @@ export function ProductInfo({ product }: ProductInfoProps) {
 
             {/* Actions */}
             <div className="border-t border-b border-gray-100 py-6 space-y-4">
-                <div className="flex items-center gap-4">
-                    {/* Quantity */}
-                    <div className="flex items-center border border-gray-300 rounded-lg">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+                    {/* Row 1 Mobile: Quantity + Wishlist */}
+                    <div className="flex gap-4 sm:contents">
+                        {/* Quantity */}
+                        <div className="flex-1 sm:flex-none flex items-center justify-between sm:justify-start border border-gray-300 rounded-xl">
+                            <button
+                                onClick={handleDecrement}
+                                className="px-4 py-3 text-gray-600 hover:bg-gray-50 transition-colors"
+                            >
+                                -
+                            </button>
+                            <span className="px-4 py-3 font-medium text-gray-900 w-12 text-center">
+                                {quantity}
+                            </span>
+                            <button
+                                onClick={handleIncrement}
+                                className="px-4 py-3 text-gray-600 hover:bg-gray-50 transition-colors"
+                            >
+                                +
+                            </button>
+                        </div>
+
+                        {/* Wishlist - Mobile Only */}
                         <button
-                            onClick={handleDecrement}
-                            className="px-3 py-2 text-gray-600 hover:bg-gray-50 transition-colors"
+                            onClick={handleWishlistClick}
+                            className={`sm:hidden p-3.5 border rounded-xl transition-colors ${isWishlisted ? 'border-accent-red text-accent-red hover:bg-red-50' : 'border-gray-300 text-gray-400 hover:text-accent-red hover:border-accent-red'}`}
                         >
-                            -
-                        </button>
-                        <span className="px-3 py-2 font-medium text-gray-900 w-12 text-center">
-                            {quantity}
-                        </span>
-                        <button
-                            onClick={handleIncrement}
-                            className="px-3 py-2 text-gray-600 hover:bg-gray-50 transition-colors"
-                        >
-                            +
+                            <FiHeart className={`w-6 h-6 ${isWishlisted ? 'fill-current' : ''}`} />
                         </button>
                     </div>
 
-                    {/* Add to Cart / Buy Now */}
-                    <button
-                        onClick={handleBuyNow}
-                        className="flex-1 bg-gray-900 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-800 transition-all shadow-lg hover:shadow-xl active:scale-[0.98]"
-                    >
-                        Buy Now
-                    </button>
+                    {/* Row 2 Mobile: Buttons */}
+                    <div className="flex gap-4 sm:contents">
+                        {/* Add to Cart - Secondary Action */}
+                        <button
+                            onClick={() => addToCart(product, quantity, { openDrawer: false })}
+                            className="flex-1 bg-white border-2 border-gray-900 text-gray-900 font-bold py-3.5 px-6 rounded-xl hover:bg-gray-50 transition-all shadow-sm hover:shadow-md active:scale-[0.98] text-base flex items-center justify-center gap-2"
+                            aria-label="Add to Cart"
+                        >
+                            <FiShoppingCart className="w-5 h-5" />
+                            <span className="hidden sm:inline">Add</span>
+                        </button>
 
-                    {/* Wishlist */}
-                    <button className="p-3 border border-gray-300 rounded-lg md:text-gray-400 hover:text-accent-red hover:border-accent-red transition-colors">
-                        <FiHeart className="w-6 h-6" />
+                        {/* Buy Now - Primary Action */}
+                        <button
+                            onClick={handleBuyNow}
+                            className="flex-1 bg-gray-900 text-white font-bold py-3.5 px-6 rounded-xl hover:bg-gray-800 transition-all shadow-lg hover:shadow-xl active:scale-[0.98] text-base"
+                        >
+                            Buy Now
+                        </button>
+                    </div>
+
+                    {/* Wishlist - Desktop Only */}
+                    <button
+                        onClick={handleWishlistClick}
+                        className={`hidden sm:block p-3.5 border rounded-xl transition-colors ${isWishlisted ? 'border-accent-red text-accent-red hover:bg-red-50' : 'border-gray-300 text-gray-400 hover:text-accent-red hover:border-accent-red'}`}
+                    >
+                        <FiHeart className={`w-6 h-6 ${isWishlisted ? 'fill-current' : ''}`} />
                     </button>
                 </div>
 
                 {/* WhatsApp Button */}
                 <button
                     onClick={handleWhatsAppClick}
-                    className="w-full flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold py-3 px-6 rounded-lg hover:bg-[#20bd5a] transition-all shadow-md hover:shadow-lg active:scale-[0.98]"
+                    className="w-full flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold py-3.5 px-6 rounded-xl hover:bg-[#20bd5a] transition-all shadow-md hover:shadow-lg active:scale-[0.98] text-base"
                 >
-                    <FaWhatsapp className="w-5 h-5" />
+                    <FaWhatsapp className="w-6 h-6" />
                     Chat on WhatsApp
                 </button>
             </div>

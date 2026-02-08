@@ -16,38 +16,29 @@ export default function AdminProductsPage() {
     const [categories, setCategories] = useState<Array<{ id: string; name: string }>>([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const fetchProducts = async () => {
+    const fetchData = async () => {
         setIsLoading(true);
-        const { data, error } = await supabase
-            .from('products')
-            .select('*')
-            .order('created_at', { ascending: false });
+        try {
+            const [productsResult, categoriesResult] = await Promise.all([
+                supabase.from('products').select('*').order('created_at', { ascending: false }),
+                supabase.from('categories').select('id, name').order('name')
+            ]);
 
-        if (error) {
-            toast.error('Failed to load products');
-            console.error(error);
-        } else {
-            setProducts(data || []);
-        }
-        setIsLoading(false);
-    };
+            if (productsResult.error) throw productsResult.error;
+            if (categoriesResult.error) throw categoriesResult.error;
 
-    const fetchCategories = async () => {
-        const { data, error } = await supabase
-            .from('categories')
-            .select('id, name')
-            .order('name');
-
-        if (error) {
-            console.error('Error fetching categories:', error);
-        } else {
-            setCategories(data || []);
+            setProducts(productsResult.data || []);
+            setCategories(categoriesResult.data || []);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            toast.error('Failed to load data');
+        } finally {
+            setIsLoading(false);
         }
     };
 
     useEffect(() => {
-        fetchProducts();
-        fetchCategories();
+        fetchData();
     }, []);
 
     const handleDelete = async (id: string) => {
@@ -137,7 +128,12 @@ export default function AdminProductsPage() {
                 </div>
             </div>
 
-            <ProductListTable products={filteredProducts} onDelete={handleDelete} />
+            <ProductListTable
+                products={filteredProducts}
+                categories={categories}
+                isLoading={isLoading}
+                onDelete={handleDelete}
+            />
         </div>
     );
 }

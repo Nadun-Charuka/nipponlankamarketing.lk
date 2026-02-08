@@ -43,7 +43,7 @@ export function ProductGallery({ images = [], featuredImage, productName }: Prod
     return (
         <div className="product-gallery space-y-3">
             {/* Main Slider */}
-            <div className="relative aspect-[4/3] md:aspect-auto md:h-[350px] bg-white rounded-2xl overflow-hidden border border-gray-100 flex items-center justify-center">
+            <div className="relative aspect-square md:aspect-auto md:h-[500px] bg-white md:rounded-2xl overflow-hidden border-b md:border border-gray-100 flex items-center justify-center -mx-4 md:mx-0">
                 <Swiper
                     spaceBetween={10}
                     navigation={true}

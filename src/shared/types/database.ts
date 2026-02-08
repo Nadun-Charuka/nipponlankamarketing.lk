@@ -28,7 +28,12 @@ export interface Product {
   
   // Flags
   is_featured: boolean;
+  is_new: boolean;
   is_active: boolean;
+  
+  // Display ordering
+  featured_order: number;
+  new_arrival_order: number;
   
   // Timestamps
   created_at: string;

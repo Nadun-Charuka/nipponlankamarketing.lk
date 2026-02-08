@@ -1,6 +1,8 @@
 import { CategoryForm } from '@/features/admin/components/CategoryForm';
 
-export default function EditCategoryPage({ params }: { params: { id: string } }) {
+export default async function EditCategoryPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params;
+
     return (
         <div className="p-8">
             <div className="mb-8">
@@ -8,7 +10,7 @@ export default function EditCategoryPage({ params }: { params: { id: string } })
                 <p className="text-gray-600 mt-1">Update category information and icon</p>
             </div>
 
-            <CategoryForm categoryId={params.id} />
+            <CategoryForm categoryId={id} />
         </div>
     );
 }

@@ -14,23 +14,42 @@ import { generateLocalBusinessSchema } from '@/shared/lib/seo';
 
 export default function HomePage() {
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
-  const [products, setProducts] = useState<Product[]>([]);
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+  const [newArrivals, setNewArrivals] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchProducts() {
-      const { data, error } = await supabase
+      // Fetch Featured Products
+      const { data: featured, error: featuredError } = await supabase
         .from('products')
         .select('*')
         .eq('is_active', true)
-        .order('created_at', { ascending: false })
-        .limit(10); // get top 10 newest
+        .eq('is_featured', true)
+        .order('featured_order', { ascending: true })
+        .limit(10);
 
-      if (error) {
-        console.error('Error fetching products:', error);
+      if (featuredError) {
+        console.error('Error fetching featured products:', featuredError);
       } else {
-        setProducts(data || []);
+        setFeaturedProducts(featured || []);
       }
+
+      // Fetch New Arrivals
+      const { data: newProducts, error: newError } = await supabase
+        .from('products')
+        .select('*')
+        .eq('is_active', true)
+        .eq('is_new', true)
+        .order('new_arrival_order', { ascending: true })
+        .limit(10);
+
+      if (newError) {
+        console.error('Error fetching new arrivals:', newError);
+      } else {
+        setNewArrivals(newProducts || []);
+      }
+
       setLoading(false);
     }
 
@@ -66,39 +85,43 @@ export default function HomePage() {
         <PromoBanners />
 
         {/* Featured Products Section (Carousel) */}
-        <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <ProductCarousel
-              products={products}
-              title="🌟 Featured Products"
-              onQuickView={handleQuickView}
-              onAddToWishlist={handleAddToWishlist}
-            />
+        {featuredProducts.length > 0 && (
+          <section className="py-16 bg-gray-50">
+            <div className="container mx-auto px-4">
+              <ProductCarousel
+                products={featuredProducts}
+                title="🌟 Featured Products"
+                onQuickView={handleQuickView}
+                onAddToWishlist={handleAddToWishlist}
+              />
 
-            {/* View All Link */}
-            <div className="text-center mt-12">
-              <a
-                href="/products"
-                className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-8 py-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-xl"
-              >
-                View All Products
-                <span>→</span>
-              </a>
+              {/* View All Link */}
+              <div className="text-center mt-12">
+                <a
+                  href="/products"
+                  className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-8 py-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-xl"
+                >
+                  View All Products
+                  <span>→</span>
+                </a>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* New Arrivals Section (Carousel) */}
-        <section className="py-16 bg-white overflow-hidden">
-          <div className="container mx-auto px-4">
-            <ProductCarousel
-              products={[...products].reverse()}
-              title="🚀 New Arrivals"
-              onQuickView={handleQuickView}
-              onAddToWishlist={handleAddToWishlist}
-            />
-          </div>
-        </section>
+        {newArrivals.length > 0 && (
+          <section className="py-16 bg-white overflow-hidden">
+            <div className="container mx-auto px-4">
+              <ProductCarousel
+                products={newArrivals}
+                title="🚀 New Arrivals"
+                onQuickView={handleQuickView}
+                onAddToWishlist={handleAddToWishlist}
+              />
+            </div>
+          </section>
+        )}
 
         {/* Brand Showcase */}
         <BrandShowcase />

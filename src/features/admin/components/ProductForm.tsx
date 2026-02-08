@@ -43,6 +43,10 @@ export function ProductForm({ initialData, isEditing = false }: ProductFormProps
         sku: '',
         description: '',
         specifications: {},
+        is_featured: false,
+        is_new: false,
+        featured_order: 0,
+        new_arrival_order: 0,
         ...initialData
     });
 
@@ -528,6 +532,102 @@ export function ProductForm({ initialData, isEditing = false }: ProductFormProps
                                     Auto-calculated: {discountPercent}% off
                                 </p>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Display Settings Section */}
+                <div className="bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl">
+                    <div className="px-4 py-6 sm:p-8">
+                        <h3 className="text-base font-semibold leading-7 text-gray-900 mb-6">Display Settings</h3>
+                        <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
+                            {/* Featured Checkbox */}
+                            <div className="sm:col-span-3">
+                                <div className="flex items-start gap-3">
+                                    <div className="flex h-6 items-center">
+                                        <input
+                                            id="is_featured"
+                                            name="is_featured"
+                                            type="checkbox"
+                                            checked={formData.is_featured || false}
+                                            onChange={(e) => setFormData(prev => ({ ...prev, is_featured: e.target.checked }))}
+                                            className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-600 cursor-pointer"
+                                        />
+                                    </div>
+                                    <div className="text-sm leading-6">
+                                        <label htmlFor="is_featured" className="font-medium text-gray-900 cursor-pointer">
+                                            ⭐ Featured Product
+                                        </label>
+                                        <p className="text-gray-500">Show in Featured Products section</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* New Arrival Checkbox */}
+                            <div className="sm:col-span-3">
+                                <div className="flex items-start gap-3">
+                                    <div className="flex h-6 items-center">
+                                        <input
+                                            id="is_new"
+                                            name="is_new"
+                                            type="checkbox"
+                                            checked={formData.is_new || false}
+                                            onChange={(e) => setFormData(prev => ({ ...prev, is_new: e.target.checked }))}
+                                            className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-600 cursor-pointer"
+                                        />
+                                    </div>
+                                    <div className="text-sm leading-6">
+                                        <label htmlFor="is_new" className="font-medium text-gray-900 cursor-pointer">
+                                            🚀 New Arrival
+                                        </label>
+                                        <p className="text-gray-500">Show in New Arrivals section</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Featured Order */}
+                            {formData.is_featured && (
+                                <div className="sm:col-span-3">
+                                    <label htmlFor="featured_order" className="block text-sm font-medium leading-6 text-gray-900">
+                                        Featured Display Order
+                                    </label>
+                                    <div className="mt-2">
+                                        <input
+                                            type="number"
+                                            name="featured_order"
+                                            id="featured_order"
+                                            min="0"
+                                            max="999"
+                                            value={formData.featured_order || 0}
+                                            onChange={(e) => setFormData(prev => ({ ...prev, featured_order: parseInt(e.target.value) || 0 }))}
+                                            className="block w-full rounded-lg border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm leading-6"
+                                        />
+                                    </div>
+                                    <p className="mt-1 text-xs text-gray-500">Lower numbers appear first (0 = first)</p>
+                                </div>
+                            )}
+
+                            {/* New Arrival Order */}
+                            {formData.is_new && (
+                                <div className="sm:col-span-3">
+                                    <label htmlFor="new_arrival_order" className="block text-sm font-medium leading-6 text-gray-900">
+                                        New Arrival Display Order
+                                    </label>
+                                    <div className="mt-2">
+                                        <input
+                                            type="number"
+                                            name="new_arrival_order"
+                                            id="new_arrival_order"
+                                            min="0"
+                                            max="999"
+                                            value={formData.new_arrival_order || 0}
+                                            onChange={(e) => setFormData(prev => ({ ...prev, new_arrival_order: parseInt(e.target.value) || 0 }))}
+                                            className="block w-full rounded-lg border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm leading-6"
+                                        />
+                                    </div>
+                                    <p className="mt-1 text-xs text-gray-500">Lower numbers appear first (0 = first)</p>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

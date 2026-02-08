@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { FiHeart, FiEye, FiShoppingCart } from 'react-icons/fi';
 import { Product } from '@/shared/types/database';
 import { DualPriceDisplay } from '@/features/pricing/components/DualPriceDisplay';
+import { useCart } from '@/features/cart/context/CartContext';
+import { useWishlist } from '@/features/wishlist/context/WishlistContext';
 
 interface ProductCardProps {
     product: Product;
@@ -13,13 +15,19 @@ interface ProductCardProps {
     onAddToWishlist?: (productId: string) => void;
 }
 
-export function ProductCard({ product, onQuickView, onAddToWishlist }: ProductCardProps) {
-    const [isWishlisted, setIsWishlisted] = useState(false);
+export function ProductCard({ product, onQuickView }: ProductCardProps) {
+    const { addToCart } = useCart();
+    const { isInWishlist, toggleWishlist } = useWishlist();
+    const isWishlisted = isInWishlist(product.id);
+
+    const handleAddToCart = (e: React.MouseEvent) => {
+        e.preventDefault();
+        addToCart(product, 1, { openDrawer: false });
+    };
 
     const handleWishlistClick = (e: React.MouseEvent) => {
         e.preventDefault();
-        setIsWishlisted(!isWishlisted);
-        onAddToWishlist?.(product.id);
+        toggleWishlist(product);
     };
 
     const handleQuickView = (e: React.MouseEvent) => {
@@ -81,17 +89,31 @@ export function ProductCard({ product, onQuickView, onAddToWishlist }: ProductCa
                     </span>
                 )}
 
+                {product.is_new && (
+                    <span className="absolute top-10 right-2 px-2 py-0.5 bg-green-600 text-white text-[10px] uppercase font-bold tracking-wider rounded-sm shadow-sm z-10">
+                        NEW
+                    </span>
+                )}
+
                 {/* Quick Actions Overlay (Desktop) */}
                 <div className="absolute inset-x-0 bottom-0 p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 hidden lg:flex justify-center gap-2 bg-white/90 backdrop-blur-sm border-t border-gray-100">
                     <button
-                        onClick={handleQuickView}
+                        onClick={handleAddToCart}
                         className="flex-1 flex items-center justify-center gap-1 bg-gray-900 text-white text-xs font-bold py-2 rounded hover:bg-gray-800 transition-colors"
                     >
-                        <FiEye className="w-3 h-3" /> Quick View
+                        <FiShoppingCart className="w-3 h-3" /> Add to Cart
+                    </button>
+                    <button
+                        onClick={handleQuickView}
+                        className="w-8 h-8 flex items-center justify-center rounded border border-gray-200 hover:border-primary-500 hover:text-primary-500 transition-colors"
+                        aria-label="Quick View"
+                    >
+                        <FiEye className="w-4 h-4" />
                     </button>
                     <button
                         onClick={handleWishlistClick}
                         className={`w-8 h-8 flex items-center justify-center rounded border border-gray-200 hover:border-accent-red hover:text-accent-red transition-colors ${isWishlisted ? 'text-accent-red border-accent-red' : 'text-gray-400'}`}
+                        aria-label="Add to Wishlist"
                     >
                         <FiHeart className={`w-4 h-4 ${isWishlisted ? 'fill-current' : ''}`} />
                     </button>
@@ -117,10 +139,18 @@ export function ProductCard({ product, onQuickView, onAddToWishlist }: ProductCa
                     <DualPriceDisplay basePrice={product.base_price} variant="card" />
                 </div>
 
-                {/* Mobile Action Button */}
-                <button className="mt-3 w-full lg:hidden bg-primary-600 text-white text-xs font-bold py-2 rounded hover:bg-primary-700 transition-colors">
-                    View Details
-                </button>
+                {/* Mobile Action Buttons */}
+                <div className="mt-3 grid grid-cols-2 gap-2 lg:hidden">
+                    <button
+                        onClick={handleAddToCart}
+                        className="flex items-center justify-center gap-2 bg-gray-900 text-white text-xs font-bold py-2 rounded hover:bg-gray-800 transition-colors"
+                    >
+                        <FiShoppingCart className="w-3 h-3" /> Add
+                    </button>
+                    <button className="bg-gray-100 text-gray-900 text-xs font-bold py-2 rounded hover:bg-gray-200 transition-colors">
+                        View
+                    </button>
+                </div>
             </div>
         </div>
     );
