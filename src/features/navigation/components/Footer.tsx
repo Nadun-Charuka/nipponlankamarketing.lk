@@ -40,11 +40,9 @@ export function Footer() {
                     <div>
                         <h4 className="text-white text-lg font-bold mb-6 uppercase tracking-wider">Quick Links</h4>
                         <ul className="space-y-3">
-                            <li><Link href="/about" className="hover:text-primary-400 transition-colors">About Us</Link></li>
-                            <li><Link href="/contact" className="hover:text-primary-400 transition-colors">Contact Us</Link></li>
                             <li><Link href="/products" className="hover:text-primary-400 transition-colors">All Products</Link></li>
-                            <li><Link href="/terms" className="hover:text-primary-400 transition-colors">Terms & Conditions</Link></li>
-                            <li><Link href="/privacy" className="hover:text-primary-400 transition-colors">Privacy Policy</Link></li>
+                            <li><Link href="/about" className="hover:text-primary-400 transition-colors">About Us</Link></li>
+                            <li><Link href="/about#how-to-order" className="hover:text-primary-400 transition-colors">How to Order</Link></li>
                         </ul>
                     </div>
 
@@ -94,10 +92,8 @@ export function Footer() {
 
                     {/* Payment Methods */}
                     <div className="flex gap-3">
-                        <div className="h-8 w-12 bg-white rounded flex items-center justify-center text-xs font-bold text-gray-800">VISA</div>
-                        <div className="h-8 w-12 bg-white rounded flex items-center justify-center text-xs font-bold text-gray-800">MASTER</div>
-                        <div className="h-8 w-12 bg-white rounded flex items-center justify-center text-xs font-bold text-gray-800">AMEX</div>
-                        <div className="h-8 w-12 bg-white rounded flex items-center justify-center text-xs font-bold text-gray-800">CASH</div>
+                        <div className="h-8 w-20 p-5 bg-white rounded flex items-center justify-center text-xs font-bold text-gray-800">BANK TRANSFER</div>
+                        <div className="h-8 w-20 p-5 bg-white rounded flex items-center justify-center text-xs font-bold text-gray-800">CASH ON DELIVERY</div>
                     </div>
                 </div>
             </div>

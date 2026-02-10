@@ -1,3 +1,5 @@
+'use client';
+
 import { FiCreditCard, FiTruck, FiShield } from 'react-icons/fi';
 
 const banners = [

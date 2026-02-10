@@ -1,4 +1,5 @@
 import { TopBar, MainNav, Footer } from '@/features/navigation/components';
+import { WelcomePopup } from '@/features/marketing/components';
 
 export default function StoreLayout({
     children,
@@ -13,6 +14,7 @@ export default function StoreLayout({
                 {children}
             </main>
             <Footer />
+            <WelcomePopup />
         </>
     );
 }

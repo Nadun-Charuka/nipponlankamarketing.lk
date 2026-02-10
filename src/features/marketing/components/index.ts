@@ -1,4 +1,9 @@
-export { PromoBanners } from './PromoBanners';
-export { BrandShowcase } from './BrandShowcase';
-export { Testimonials } from './Testimonials';
-export { Newsletter } from './Newsletter';
+export * from './BrandShowcase';
+export * from './Newsletter';
+export * from './PromoBanners';
+export * from './Testimonials';
+export * from './WelcomePopup';
+export * from './AboutHero';
+export * from './CompanyStats';
+export * from './OrderingGuide';
+export * from './BusinessServices';
