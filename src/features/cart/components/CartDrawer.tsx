@@ -26,9 +26,12 @@ export function CartDrawer() {
 
         let message = "Hi, I'd like to place an order:%0a%0a";
 
+        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin;
+
         cartItems.forEach((item, index) => {
             const price = item.product.cash_price || item.product.base_price || 0;
-            message += `${index + 1}. ${item.product.name} (x${item.quantity}) - Rs. ${(price * item.quantity).toLocaleString()}%0a`;
+            const productUrl = `${baseUrl}/products/${item.product.slug}`;
+            message += `${index + 1}. ${item.product.name} (x${item.quantity}) - Rs. ${(price * item.quantity).toLocaleString()}%0a${productUrl}%0a`;
         });
 
         message += `%0a*Total: Rs. ${cartTotal.toLocaleString()}*`;

@@ -27,7 +27,9 @@ export function ProductInfo({ product }: ProductInfoProps) {
     };
 
     const handleWhatsAppClick = () => {
-        const message = `Hi, I'm interested in the ${product.name}. Is it available?`;
+        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin;
+        const productUrl = `${baseUrl}/products/${product.slug}`;
+        const message = `Hi, I'm interested in the ${product.name}. Is it available?\n\n${productUrl}`;
         const url = `https://wa.me/94723728550?text=${encodeURIComponent(message)}`;
         window.open(url, '_blank');
     };
