@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { AboutHero, CompanyStats, OrderingGuide, BusinessServices } from '@/features/marketing/components';
+import { AboutHero, CompanyStats, OrderingGuide, BusinessServices, AboutImageSlider } from '@/features/marketing/components';
 
 export const metadata: Metadata = {
     title: 'About Us | Nippon Lanka',
@@ -10,6 +10,7 @@ export default function AboutPage() {
     return (
         <main>
             <AboutHero />
+            <AboutImageSlider />
             <CompanyStats />
             <OrderingGuide />
             <BusinessServices />

@@ -9,78 +9,81 @@ const steps = [
         title: 'Select Your Products',
         description: 'Browse our wide range of electronics and furniture. Add your desired items to the cart or wishlist.',
         icon: ShoppingCart,
-        bgClass: 'bg-blue-500',
-        textClass: 'text-blue-600',
-        iconClass: 'text-blue-500',
     },
     {
         id: 2,
         title: 'WhatsApp Consultation',
         description: 'Chat with our team directly. We will confirm stock, discuss pricing, and answer any questions.',
         icon: MessageCircle,
-        bgClass: 'bg-green-500',
-        textClass: 'text-green-600',
-        iconClass: 'text-green-500',
     },
     {
         id: 3,
         title: 'Document Submission',
         description: 'For installment plans, simple documentation is required. Send them easily via WhatsApp or Email.',
         icon: FileText,
-        bgClass: 'bg-purple-500',
-        textClass: 'text-purple-600',
-        iconClass: 'text-purple-500',
     },
     {
         id: 4,
         title: 'Delivery & Enjoy',
         description: 'Once approved, we arrange swift delivery to your doorstep. Setup and installation included!',
         icon: Truck,
-        bgClass: 'bg-pink-500',
-        textClass: 'text-pink-600',
-        iconClass: 'text-pink-500',
     },
 ];
 
 export function OrderingGuide() {
     return (
-        <section id="how-to-order" className="py-20 bg-gray-50">
+        <section id="how-to-order" className="py-24 bg-gradient-to-b from-gray-50 to-purple-50 overflow-hidden">
             <div className="container mx-auto px-4">
-                <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-4xl font-display font-bold text-gray-900 mb-4">
-                        How to Order
-                    </h2>
-                    <p className="text-gray-600 max-w-2xl mx-auto">
-                        Our ordering process is designed to be simple, transparent, and hassle-free.
-                        From selection to delivery, we guide you every step of the way.
-                    </p>
+                <div className="text-center mb-20">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6 }}
+                    >
+                        <h2 className="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-6">
+                            How to <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">Order</span>
+                        </h2>
+                        <p className="text-gray-600 max-w-2xl mx-auto text-lg">
+                            Our ordering process is designed to be simple, transparent, and hassle-free.
+                            We guide you every step of the way.
+                        </p>
+                    </motion.div>
                 </div>
 
                 <div className="relative">
                     {/* Connecting Line (Desktop) */}
-                    <div className="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-gray-200 -translate-y-1/2 z-0" />
+                    <div className="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-gradient-to-r from-purple-200 via-pink-200 to-purple-200 -translate-y-1/2 z-0 rounded-full opacity-50" />
 
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
                         {steps.map((step, index) => (
                             <motion.div
                                 key={step.id}
-                                initial={{ opacity: 0, y: 30 }}
+                                initial={{ opacity: 0, y: 50 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.2, duration: 0.6 }}
-                                className="bg-white p-8 rounded-3xl shadow-lg border border-gray-100 relative group hover:translate-y-[-5px] transition-transform duration-300"
+                                className="group relative"
                             >
-                                {/* Step Number Badge */}
-                                <div className={`absolute -top-6 left-1/2 -translate-x-1/2 w-12 h-12 rounded-full ${step.bgClass} text-white flex items-center justify-center font-bold text-xl shadow-md ring-4 ring-white`}>
-                                    {step.id}
-                                </div>
+                                <div className="bg-white/80 backdrop-blur-sm p-8 rounded-3xl shadow-lg border border-purple-100 relative hover:shadow-2xl hover:bg-white transition-all duration-300 h-full flex flex-col items-center text-center">
 
-                                <div className="mt-8 text-center">
-                                    <div className={`w-16 h-16 mx-auto rounded-2xl ${step.bgClass} bg-opacity-10 ${step.textClass} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
-                                        <step.icon className={`w-8 h-8 ${step.iconClass}`} />
+                                    {/* Icon Container */}
+                                    <div className="w-20 h-20 mb-6 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                        <step.icon className="w-10 h-10" />
                                     </div>
-                                    <h3 className="text-xl font-bold text-gray-900 mb-3">{step.title}</h3>
-                                    <p className="text-gray-600 text-sm leading-relaxed">{step.description}</p>
+
+                                    {/* Step Number Badge */}
+                                    <div className="absolute -top-4 -right-4 w-10 h-10 rounded-full bg-white border-2 border-purple-100 text-purple-600 flex items-center justify-center font-bold shadow-sm z-20">
+                                        {step.id}
+                                    </div>
+
+                                    <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-purple-700 transition-colors">
+                                        {step.title}
+                                    </h3>
+
+                                    <p className="text-gray-500 text-sm leading-relaxed">
+                                        {step.description}
+                                    </p>
                                 </div>
                             </motion.div>
                         ))}

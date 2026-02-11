@@ -4,95 +4,81 @@ import { motion } from 'framer-motion';
 
 export function AboutHero() {
     return (
-        <section className="relative py-20 overflow-hidden bg-purple-900 text-white">
-            {/* Background Pattern */}
+        <section className="relative h-[65vh] min-h-[500px] flex items-end justify-start md:items-center md:justify-center overflow-hidden pb-24 md:pb-0">
+            {/* Background Video */}
             <div className="absolute inset-0">
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-800 via-purple-900 to-pink-800" />
-                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] mix-blend-overlay opacity-30" />
-                <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-purple-500/40 rounded-full blur-[100px]" />
-                <div className="absolute bottom-[-20%] left-[-10%] w-[500px] h-[500px] bg-pink-500/40 rounded-full blur-[100px]" />
+                <div className="absolute inset-0 bg-gradient-to-t from-purple-900/90 via-purple-900/40 to-transparent md:bg-gradient-to-r md:from-purple-900/60 md:to-pink-900/60 z-10" />
+                <video
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    // poster="https://hhkanlbzspxxwraatkgt.supabase.co/storage/v1/object/public/about_hero/for%20about%20us%201.jpg"
+                    className="w-full h-full object-cover"
+                >
+                    <source src="https://hhkanlbzspxxwraatkgt.supabase.co/storage/v1/object/public/about_hero/about_hero_video%20(1)%20(1).mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
             </div>
 
-            <div className="container mx-auto px-4 relative z-10">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                    {/* Text Content */}
-                    <motion.div
-                        initial={{ opacity: 0, x: -50 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8 }}
-                    >
-                        <div className="inline-block px-4 py-1.5 mb-6 border border-purple-400/50 rounded-full bg-purple-500/20 backdrop-blur-sm">
-                            <span className="text-purple-300 font-bold text-sm tracking-widest uppercase">Since 2000</span>
-                        </div>
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-6 leading-tight">
-                            Empowering Homes <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 animate-text-shimmer bg-[length:200%_auto]">
-                                Across Sri Lanka
-                            </span>
-                        </h1>
-                        <p className="text-gray-300 text-lg leading-relaxed mb-8">
-                            Nippon Lanka Marketing Pvt Ltd has been a trusted name in electronics and home appliances for over two decades.
-                            We are dedicated to bringing the latest technology and highest quality products to every Sri Lankan household,
-                            backed by exceptional service and genuine care.
-                        </p>
-                        <div className="flex flex-wrap gap-4">
-                            <div className="px-6 py-4 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl">
-                                <p className="text-3xl font-bold text-white mb-1">24+</p>
-                                <p className="text-sm text-gray-400 uppercase tracking-wider">Years of Excellence</p>
-                            </div>
-                            <div className="px-6 py-4 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl">
-                                <p className="text-3xl font-bold text-white mb-1">12+</p>
-                                <p className="text-sm text-gray-400 uppercase tracking-wider">Dedicated Staff</p>
-                            </div>
-                        </div>
-                    </motion.div>
+            {/* Content */}
+            <div className="relative z-20 container mx-auto px-4 text-left md:text-center w-full">
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8 }}
+                    className="max-w-4xl mx-auto md:mx-auto"
+                >
+                    <div className="inline-block px-4 py-1.5 md:px-6 md:py-2 mb-6 md:mb-8 border border-white/20 rounded-full bg-white/10 backdrop-blur-md">
+                        <span className="text-white font-medium tracking-[0.2em] uppercase text-xs md:text-sm">Since year 2000</span>
+                    </div>
 
-                    {/* Image Grid */}
+                    <h1 className="text-4xl md:text-7xl font-display font-bold mb-6 md:mb-8 leading-tight text-white drop-shadow-lg">
+                        Empowering Homes <br />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-200 via-pink-200 to-purple-200 animate-text-shimmer bg-[length:200%_auto]">
+                            Across Sri Lanka
+                        </span>
+                    </h1>
+
+                    <p className="text-lg md:text-2xl text-gray-100 mb-8 md:mb-12 leading-relaxed max-w-xl md:max-w-2xl md:mx-auto drop-shadow-md">
+                        Bringing the latest technology and highest quality products to every household with exceptional service and care.
+                    </p>
+
+                    <div className="flex flex-wrap justify-start md:justify-center gap-4 md:gap-6">
+                        <motion.div
+                            whileHover={{ scale: 1.05 }}
+                            className="px-6 py-4 md:px-8 md:py-6 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl hover:bg-white/20 transition-all duration-300"
+                        >
+                            <p className="text-2xl md:text-4xl font-bold text-white mb-1">24+</p>
+                            <p className="text-xs md:text-sm text-gray-200 uppercase tracking-wider font-medium">Years</p>
+                        </motion.div>
+
+                        <motion.div
+                            whileHover={{ scale: 1.05 }}
+                            className="px-6 py-4 md:px-8 md:py-6 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl hover:bg-white/20 transition-all duration-300"
+                        >
+                            <p className="text-2xl md:text-4xl font-bold text-white mb-1">12+</p>
+                            <p className="text-xs md:text-sm text-gray-200 uppercase tracking-wider font-medium">Staff</p>
+                        </motion.div>
+                    </div>
+                </motion.div>
+            </div>
+
+            {/* Scroll Indicator */}
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1, duration: 1 }}
+                className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20"
+            >
+                <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center pt-2">
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8 }}
-                        className="relative"
-                    >
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-4 translate-y-8">
-                                <div className="h-64 rounded-2xl overflow-hidden shadow-2xl">
-                                    <img
-                                        src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                                        alt="Meeting"
-                                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
-                                    />
-                                </div>
-                                <div className="h-48 rounded-2xl overflow-hidden shadow-2xl">
-                                    <img
-                                        src="https://images.unsplash.com/photo-1577962917302-cd874c4e3169?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                                        alt="Electronics"
-                                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
-                                    />
-                                </div>
-                            </div>
-                            <div className="space-y-4">
-                                <div className="h-48 rounded-2xl overflow-hidden shadow-2xl">
-                                    <img
-                                        src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                                        alt="Team"
-                                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
-                                    />
-                                </div>
-                                <div className="h-64 rounded-2xl overflow-hidden shadow-2xl">
-                                    <img
-                                        src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                                        alt="Office"
-                                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </motion.div>
+                        animate={{ y: [0, 12, 0] }}
+                        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                        className="w-1.5 h-1.5 bg-white rounded-full"
+                    />
                 </div>
-            </div>
+            </motion.div>
         </section>
     );
 }
