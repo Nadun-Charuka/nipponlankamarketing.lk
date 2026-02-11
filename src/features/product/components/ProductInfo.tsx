@@ -27,7 +27,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
     };
 
     const handleWhatsAppClick = () => {
-        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin;
+        const baseUrl = typeof window !== 'undefined' ? window.location.origin : (process.env.NEXT_PUBLIC_SITE_URL || 'https://nipponlanka.vercel.app');
         const productUrl = `${baseUrl}/products/${product.slug}`;
         const message = `Hi, I'm interested in the ${product.name}. Is it available?\n\n${productUrl}`;
         const url = `https://wa.me/94723728550?text=${encodeURIComponent(message)}`;

@@ -26,7 +26,7 @@ export function CartDrawer() {
 
         let message = "Hi, I'd like to place an order:%0a%0a";
 
-        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin;
+        const baseUrl = typeof window !== 'undefined' ? window.location.origin : (process.env.NEXT_PUBLIC_SITE_URL || 'https://nipponlanka.vercel.app');
 
         cartItems.forEach((item, index) => {
             const price = item.product.cash_price || item.product.base_price || 0;
