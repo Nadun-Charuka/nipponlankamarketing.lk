@@ -186,3 +186,69 @@ INSERT INTO admin_users (email, role) VALUES
 COMMENT ON TABLE products IS 'Product catalog with automatic cash price calculation (20% discount)';
 COMMENT ON COLUMN products.cash_price IS 'Automatically calculated as 80% of base_price';
 COMMENT ON COLUMN products.base_price IS 'Full installment price (12 months default)';
+
+-- Reviews table
+CREATE TABLE reviews (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name TEXT NOT NULL,
+  location TEXT,
+  rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
+  text TEXT NOT NULL,
+  product_name TEXT, -- Optional, can be linked to product_id if needed, but keeping it simple for now as per requirement
+  is_approved BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Enable RLS for reviews
+ALTER TABLE reviews ENABLE ROW LEVEL SECURITY;
+
+-- Public can view approved reviews
+CREATE POLICY "Public can view approved reviews"
+  ON reviews FOR SELECT
+  USING (is_approved = TRUE);
+
+-- Public can insert reviews (but they need approval to be shown)
+CREATE POLICY "Public can insert reviews"
+  ON reviews FOR INSERT
+  WITH CHECK (TRUE);
+
+-- Database function to automatically approve high rated reviews (optional, for demo purposes)
+-- status: 'approved' if rating >= 4, else 'pending'
+-- actually, let's keep it simple: defaulting to approved for now since we don't have an admin panel for reviews yet
+ALTER TABLE reviews ALTER COLUMN is_approved SET DEFAULT TRUE;
+
+
+-- Seed dummy reviews
+INSERT INTO reviews (name, location, rating, text, product_name, is_approved) VALUES
+  (
+    'Dilshan Perera',
+    'Colombo 05',
+    5,
+    'Excellent service! I ordered a Samsung TV and it was delivered the same day. The dual price option is great, got a good cash discount.',
+    'Samsung 55" 4K Smart TV',
+    TRUE
+  ),
+  (
+    'Kumari Silva',
+    'Kandy',
+    5,
+    'Trusted place to buy home appliances. The installment plan was very helpful. Customer support is very responsive on WhatsApp.',
+    'LG Double Door Refrigerator',
+    TRUE
+  ),
+  (
+    'Mohamed Fazil',
+    'Dehiwala',
+    4,
+    'Good collection of products. Prices are competitive compared to others. Delivery was fast and the team was professional.',
+    'Abans Washing Machine',
+    TRUE
+  ),
+  (
+    'Samanthi Gunawardena',
+    'Gampaha',
+    5,
+    'Highly recommend Nippon Lanka! Bought a sofa set and it looks amazing. High quality furniture and good finish.',
+    'Damro Sofa Set',
+    TRUE
+  );

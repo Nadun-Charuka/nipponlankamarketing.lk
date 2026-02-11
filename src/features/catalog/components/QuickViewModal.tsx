@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+import Image from 'next/image';
 import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { FiX } from 'react-icons/fi';
@@ -46,15 +48,26 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
                         >
                             <Dialog.Panel className="w-full max-w-5xl bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row max-h-[90vh]">
                                 {/* Image Side (Left) - 50% width */}
-                                <div className="relative w-full md:w-1/2 bg-gray-50 flex items-center justify-center p-8 min-h-[300px] md:min-h-0">
-                                    <div className="relative aspect-square w-full max-w-sm flex items-center justify-center mix-blend-multiply">
-                                        <div className="text-center text-gray-300">
-                                            <div className="text-8xl mb-4">📦</div>
-                                            <p className="text-sm font-medium tracking-wide">Product Preview</p>
-                                        </div>
+                                <div className="relative w-full md:w-1/2 bg-white flex items-center justify-center p-8 min-h-[300px] md:min-h-0">
+                                    <div className="relative aspect-square w-full max-w-md flex items-center justify-center">
+                                        {product.featured_image ? (
+                                            <Image
+                                                src={product.featured_image}
+                                                alt={product.name}
+                                                fill
+                                                className="object-contain object-center"
+                                                sizes="(max-width: 768px) 100vw, 50vw"
+                                                priority
+                                            />
+                                        ) : (
+                                            <div className="text-center text-gray-300">
+                                                <div className="text-8xl mb-4">📦</div>
+                                                <p className="text-sm font-medium tracking-wide">Product Preview</p>
+                                            </div>
+                                        )}
                                     </div>
                                     {/* Badges Overlay */}
-                                    <div className="absolute top-6 left-6 flex flex-col gap-2">
+                                    <div className="absolute top-6 left-6 flex flex-col gap-2 z-10">
                                         {product.stock_status === 'out_of_stock' && (
                                             <span className="bg-gray-900 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
                                                 Sold Out

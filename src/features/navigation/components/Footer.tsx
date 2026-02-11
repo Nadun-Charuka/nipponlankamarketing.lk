@@ -30,7 +30,7 @@ export function Footer() {
                             <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-black hover:text-white transition-all">
                                 <FaTiktok className="w-5 h-5" />
                             </a>
-                            <a href="https://wa.me/94777123456" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-green-500 hover:text-white transition-all">
+                            <a href="https://wa.me/94723728550" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-green-500 hover:text-white transition-all">
                                 <FaWhatsapp className="w-5 h-5" />
                             </a>
                         </div>
@@ -71,8 +71,8 @@ export function Footer() {
                             </li>
                             <li className="flex items-center gap-3">
                                 <FiPhone className="w-5 h-5 text-primary-500 flex-shrink-0" />
-                                <a href="tel:+94777123456" className="hover:text-primary-400 transition-colors">
-                                    +94 77 123 4567
+                                <a href="tel:+94723728550" className="hover:text-primary-400 transition-colors">
+                                    +94 72 372 8550
                                 </a>
                             </li>
                             <li className="flex items-center gap-3">

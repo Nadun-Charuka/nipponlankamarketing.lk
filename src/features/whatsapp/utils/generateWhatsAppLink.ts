@@ -13,7 +13,7 @@ export function generateWhatsAppLink({
   location = '',
   productUrl = '',
 }: WhatsAppMessageParams): string {
-  const businessNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '94771234567';
+  const businessNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '94723728550';
   
   const planText = plan === 'cash' 
     ? 'Cash Payment (20% Discount)' 

@@ -53,7 +53,7 @@ export function ProductCard({ product, onQuickView }: ProductCardProps) {
                 // Default badge like "Warranty" or "Official Agent"
                 return (
                     <span className="absolute top-2 left-2 px-2 py-0.5 bg-accent-gold text-white text-[10px] uppercase font-bold tracking-wider rounded-sm z-10">
-                        Official Warranty
+                        Manufacture Warranty
                     </span>
                 );
         }

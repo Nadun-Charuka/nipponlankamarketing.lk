@@ -22,7 +22,7 @@ export function CartDrawer() {
 
     const handleCheckout = () => {
         // Generate WhatsApp Message
-        const phoneNumber = "94771234567"; // Replace with actual number
+        const phoneNumber = "94723728550"; // Replace with actual number
 
         let message = "Hi, I'd like to place an order:%0a%0a";
 

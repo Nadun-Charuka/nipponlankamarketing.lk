@@ -133,8 +133,8 @@ export function MobileMenu({ isOpen, onClose, menuItems }: MobileMenuProps) {
                             <div className="p-4 border-t border-gray-200 bg-gray-50">
                                 <div className="text-sm text-gray-600 space-y-1">
                                     <p className="font-semibold">Need Help?</p>
-                                    <a href="tel:+94771234567" className="block text-primary-600 hover:text-primary-700">
-                                        +94 77 123 4567
+                                    <a href="tel:+94723728550" className="block text-primary-600 hover:text-primary-700">
+                                        +94 72 372 8550
                                     </a>
                                 </div>
                             </div>

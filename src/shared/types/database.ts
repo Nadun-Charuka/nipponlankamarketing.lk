@@ -93,3 +93,14 @@ export interface CompanyStory {
 
 export type StockStatus = 'in_stock' | 'out_of_stock' | 'pre_order';
 export type PaymentPlan = 'cash' | 'installment';
+
+export interface Review {
+  id: string;
+  name: string;
+  location: string | null;
+  rating: number; // 1-5
+  text: string;
+  product_name: string | null;
+  is_approved: boolean;
+  created_at: string;
+}

@@ -8,3 +8,4 @@ export * from './CompanyStats';
 export * from './OrderingGuide';
 export * from './BusinessServices';
 export * from './AboutImageSlider';
+export * from './ViewAllProductsCTA';

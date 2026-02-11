@@ -11,11 +11,11 @@ export function TopBar() {
                     {/* Left: Contact Info */}
                     <div className="flex items-center gap-6">
                         <a
-                            href="tel:+94771234567"
+                            href="tel:+94723728550"
                             className="flex items-center gap-2 hover:text-primary-200 transition-colors"
                         >
                             <FiPhone className="w-4 h-4" />
-                            <span className="hidden sm:inline">Hotline: +94 77 123 4567</span>
+                            <span className="hidden sm:inline">Hotline: +94 72 372 8550</span>
                         </a>
 
                         <div className="flex items-center gap-2">

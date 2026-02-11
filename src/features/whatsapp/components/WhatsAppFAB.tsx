@@ -2,7 +2,7 @@
 
 export function WhatsAppFAB() {
     const handleClick = () => {
-        const number = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '94771234567';
+        const number = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '94723728550';
         const message = encodeURIComponent(
             'Hi! I would like to inquire about your products and services.'
         );

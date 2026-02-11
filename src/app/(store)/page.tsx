@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { HeroSlider } from '@/features/hero/components';
 import { ProductCarousel, QuickViewModal } from '@/features/catalog/components';
-import { PromoBanners, BrandShowcase, Testimonials } from '@/features/marketing/components';
+import { PromoBanners, BrandShowcase, Testimonials, ViewAllProductsCTA } from '@/features/marketing/components';
 import { CompanyStories } from '@/features/stories/components';
 import { WhatsAppFAB } from '@/features/whatsapp/components/WhatsAppFAB';
 import { LocationMap } from '@/features/location/components';
@@ -84,6 +84,9 @@ export default function HomePage() {
         {/* Promotional Banners */}
         <PromoBanners />
 
+        {/* View All Products CTA */}
+        <ViewAllProductsCTA />
+
         {/* Featured Products Section (Carousel) */}
         {featuredProducts.length > 0 && (
           <section className="py-16 bg-gray-50">
@@ -119,6 +122,17 @@ export default function HomePage() {
                 onQuickView={handleQuickView}
                 onAddToWishlist={handleAddToWishlist}
               />
+
+              {/* View All Link */}
+              <div className="text-center mt-12">
+                <a
+                  href="/products"
+                  className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-8 py-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-xl"
+                >
+                  View All Products
+                  <span>→</span>
+                </a>
+              </div>
             </div>
           </section>
         )}
