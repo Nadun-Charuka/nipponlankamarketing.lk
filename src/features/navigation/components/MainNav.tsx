@@ -146,15 +146,24 @@ export function MainNav() {
                         </button>
 
                         {/* Logo */}
-                        <Link href="/" className="flex items-center gap-3 flex-shrink-0">
-                            <div className="relative w-32 h-12 flex-shrink-0">
+                        {/* Logo */}
+                        <Link href="/" className="flex items-center gap-1 flex-shrink-0 group">
+                            <div className="relative w-12 h-12 flex-shrink-0">
                                 <Image
                                     src="/logo.png"
                                     alt="Nippon Lanka Marketing"
                                     fill
-                                    className="object-contain object-left"
+                                    className="object-contain"
                                     priority
                                 />
+                            </div>
+                            <div className="flex flex-col">
+                                <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600 animate-gradient-x leading-none">
+                                    ippon Lanka
+                                </span>
+                                <span className="text-[10px] font-medium tracking-[0.2em] text-gray-500 uppercase overflow-hidden whitespace-nowrap">
+                                    Marketing
+                                </span>
                             </div>
                         </Link>
 
@@ -324,15 +333,30 @@ export function MainNav() {
                 isOpen={isMobileMenuOpen}
                 onClose={() => setIsMobileMenuOpen(false)}
                 menuItems={[
-                    ...categories.map(cat => ({
-                        id: cat.id,
-                        label: cat.name,
-                        href: `/category/${cat.slug}`
-                    })),
                     {
                         id: 'all-products',
                         label: 'All Products',
-                        href: '/products'
+                        href: '/products',
+                        children: categories.map(cat => ({
+                            id: cat.id,
+                            label: cat.name,
+                            href: `/category/${cat.slug}`
+                        }))
+                    },
+                    {
+                        id: 'about',
+                        label: 'About Us',
+                        href: '/about'
+                    },
+                    {
+                        id: 'contact',
+                        label: 'Contact',
+                        href: '/contact'
+                    },
+                    {
+                        id: 'privacy policy',
+                        label: 'Privacy Policy',
+                        href: '/privacy-policy'
                     }
                 ]}
             />

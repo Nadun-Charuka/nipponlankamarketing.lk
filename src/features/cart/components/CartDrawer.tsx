@@ -6,7 +6,7 @@ import { FiX } from 'react-icons/fi';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCart } from '../context/CartContext';
-import { FiTrash2, FiMinus, FiPlus, FiMessageCircle } from 'react-icons/fi';
+import { FiTrash2, FiMinus, FiPlus, FiMessageCircle, FiPhone } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
 
 export function CartDrawer() {
@@ -184,7 +184,27 @@ export function CartDrawer() {
                                                     <p>Rs. {cartTotal.toLocaleString()}</p>
                                                 </div>
                                                 <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
-                                                <div className="mt-6">
+
+                                                {/* Installment Policy Notice */}
+                                                <div className="mt-4 mb-4 bg-red-50 p-4 rounded-xl border border-red-100 space-y-2">
+                                                    <p className="text-xs font-bold text-red-800 text-center font-sinhala leading-relaxed">
+                                                        "වාරික පදනම යටතේ එක් ජාතික හැඳුනුම්පතකට (NIC) ලබා ගත හැක්කේ භාණ්ඩ 2ක් පමණි."
+                                                    </p>
+                                                    <p className="text-[10px] text-red-600 text-center">
+                                                        (Max 2 items per NIC on Installment Basis)
+                                                    </p>
+                                                    <div className="flex justify-center gap-3 text-xs pt-1 border-t border-red-100 mt-2">
+                                                        <a href="/privacy-policy" target="_blank" className="font-semibold text-red-700 hover:text-red-900 underline">
+                                                            View Policy
+                                                        </a>
+                                                        <span className="text-red-300">|</span>
+                                                        <a href="/contact" className="font-semibold text-red-700 hover:text-red-900 flex items-center gap-1">
+                                                            <FiPhone className="w-3 h-3" /> Call for Details
+                                                        </a>
+                                                    </div>
+                                                </div>
+
+                                                <div className="mt-2">
                                                     <button
                                                         onClick={handleCheckout}
                                                         className="flex w-full items-center justify-center gap-2 rounded-md border border-transparent bg-[#25D366] px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-[#20bd5a] transition-all hover:shadow-lg active:scale-[0.99]"

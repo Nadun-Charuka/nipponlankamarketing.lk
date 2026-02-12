@@ -104,9 +104,15 @@ export function ProductInfo({ product }: ProductInfoProps) {
                     {/* Row 2 Mobile: Buttons */}
                     <div className="flex gap-4 sm:contents">
                         {/* Add to Cart - Secondary Action */}
+                        {/* Add to Cart - Secondary Action */}
                         <button
-                            onClick={() => addToCart(product, quantity, { openDrawer: false })}
-                            className="flex-1 bg-white border-2 border-gray-900 text-gray-900 font-bold py-3.5 px-6 rounded-xl hover:bg-gray-50 transition-all shadow-sm hover:shadow-md active:scale-[0.98] text-base flex items-center justify-center gap-2"
+                            onClick={() => product.stock_status !== 'out_of_stock' && addToCart(product, quantity, { openDrawer: false })}
+                            disabled={product.stock_status === 'out_of_stock'}
+                            className={`flex-1 font-bold py-3.5 px-6 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 text-base
+                                ${product.stock_status === 'out_of_stock'
+                                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed border-2 border-gray-200'
+                                    : 'bg-white border-2 border-gray-900 text-gray-900 hover:bg-gray-50 hover:shadow-md active:scale-[0.98]'
+                                }`}
                             aria-label="Add to Cart"
                         >
                             <FiShoppingCart className="w-5 h-5" />
@@ -115,10 +121,15 @@ export function ProductInfo({ product }: ProductInfoProps) {
 
                         {/* Buy Now - Primary Action */}
                         <button
-                            onClick={handleBuyNow}
-                            className="flex-1 bg-gray-900 text-white font-bold py-3.5 px-6 rounded-xl hover:bg-gray-800 transition-all shadow-lg hover:shadow-xl active:scale-[0.98] text-base"
+                            onClick={() => product.stock_status !== 'out_of_stock' && handleBuyNow()}
+                            disabled={product.stock_status === 'out_of_stock'}
+                            className={`flex-1 font-bold py-3.5 px-6 rounded-xl transition-all shadow-lg text-base
+                                ${product.stock_status === 'out_of_stock'
+                                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed shadow-none'
+                                    : 'bg-gray-900 text-white hover:bg-gray-800 hover:shadow-xl active:scale-[0.98]'
+                                }`}
                         >
-                            Buy Now
+                            {product.stock_status === 'out_of_stock' ? 'Out of Stock' : 'Buy Now'}
                         </button>
                     </div>
 
@@ -129,6 +140,13 @@ export function ProductInfo({ product }: ProductInfoProps) {
                     >
                         <FiHeart className={`w-6 h-6 ${isWishlisted ? 'fill-current' : ''}`} />
                     </button>
+                </div>
+
+                {/* Privacy Policy & Installment Info Link */}
+                <div className="text-center">
+                    <a href="/privacy-policy" target="_blank" className="text-xs text-gray-500 hover:text-primary-600 underline decoration-dotted transition-colors">
+                        View Installment Policy & Document Requirements
+                    </a>
                 </div>
 
                 {/* WhatsApp Button */}

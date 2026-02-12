@@ -21,16 +21,16 @@ export function Footer() {
                             Your trusted partner for premium electronics and home appliances in Sri Lanka. We offer the best prices, official warranties, and island-wide delivery.
                         </p>
                         <div className="flex gap-4">
-                            <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-primary-600 hover:text-white transition-all">
+                            <a href="https://www.facebook.com/profile.php?id=100064302930354" target="_blank" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-primary-600 hover:text-white transition-all">
                                 <FaFacebook className="w-5 h-5" />
                             </a>
                             <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-pink-600 hover:text-white transition-all">
                                 <FaInstagram className="w-5 h-5" />
                             </a>
-                            <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-black hover:text-white transition-all">
+                            <a href="https://www.tiktok.com/@nipponlankamarketing?is_from_webapp=1&sender_device=pc" target="_blank" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-black hover:text-white transition-all">
                                 <FaTiktok className="w-5 h-5" />
                             </a>
-                            <a href="https://wa.me/94723728550" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-green-500 hover:text-white transition-all">
+                            <a href="https://wa.me/94723728550" target="_blank" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-green-500 hover:text-white transition-all">
                                 <FaWhatsapp className="w-5 h-5" />
                             </a>
                         </div>
@@ -42,7 +42,9 @@ export function Footer() {
                         <ul className="space-y-3">
                             <li><Link href="/products" className="hover:text-primary-400 transition-colors">All Products</Link></li>
                             <li><Link href="/about" className="hover:text-primary-400 transition-colors">About Us</Link></li>
+                            <li><Link href="/contact" className="hover:text-primary-400 transition-colors">Contact Us</Link></li>
                             <li><Link href="/about#how-to-order" className="hover:text-primary-400 transition-colors">How to Order</Link></li>
+                            <li><Link href="/privacy-policy" className="hover:text-primary-400 transition-colors">Privacy Policy & Installment Rules</Link></li>
                         </ul>
                     </div>
 
@@ -65,8 +67,8 @@ export function Footer() {
                             <li className="flex items-start gap-3">
                                 <FiMapPin className="w-5 h-5 text-primary-500 mt-1 flex-shrink-0" />
                                 <span>
-                                    123, Galle Road,<br />
-                                    Colombo 03, Sri Lanka
+                                    No 1/A Horahena Rd,<br />
+                                    Hokandara, Sri Lanka
                                 </span>
                             </li>
                             <li className="flex items-center gap-3">

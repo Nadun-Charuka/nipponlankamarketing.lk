@@ -124,7 +124,7 @@ export function ProductCard({ product, onQuickView }: ProductCardProps) {
             <div className="p-3 flex flex-col flex-1">
                 {/* Category & Brand (Optional) */}
                 <div className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold mb-1">
-                    Samsung
+                    {product.brand}
                 </div>
 
                 {/* Product Name */}

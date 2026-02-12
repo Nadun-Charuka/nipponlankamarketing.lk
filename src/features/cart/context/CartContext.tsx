@@ -49,6 +49,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }, [cartItems, isInitialized]);
 
     const addToCart = (product: Product, quantity: number = 1, options: { openDrawer?: boolean } = { openDrawer: true }) => {
+        if (product.stock_status === 'out_of_stock') {
+            toast.error('Product is out of stock');
+            return;
+        }
         // Check existence logic outside setter to avoid double-toast in Strict Mode
         const existingItem = cartItems.find(item => item.product.id === product.id);
 

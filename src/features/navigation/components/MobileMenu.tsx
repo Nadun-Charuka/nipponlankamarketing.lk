@@ -9,6 +9,7 @@ interface MenuItem {
     id: string;
     label: string;
     href: string;
+    children?: MenuItem[];
 }
 
 interface MobileMenuProps {
@@ -69,7 +70,7 @@ export function MobileMenu({ isOpen, onClose, menuItems }: MobileMenuProps) {
                             {/* Menu Items */}
                             <div className="flex-1 overflow-y-auto">
                                 <nav className="p-4 space-y-2">
-                                    {/* Home Link */}
+                                    {/* Home Link - Always first */}
                                     <Link
                                         href="/"
                                         onClick={onClose}
@@ -78,54 +79,64 @@ export function MobileMenu({ isOpen, onClose, menuItems }: MobileMenuProps) {
                                         Home
                                     </Link>
 
-                                    {/* Category Links */}
+                                    {/* Menu Items */}
                                     {menuItems.map((item) => (
                                         <div key={item.id}>
-                                            <button
-                                                onClick={() => toggleCategory(item.id)}
-                                                className="w-full flex items-center justify-between px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-lg font-medium transition-colors"
-                                            >
-                                                <span>{item.label}</span>
-                                                {expandedCategory === item.id ? (
-                                                    <FiChevronDown className="w-5 h-5" />
-                                                ) : (
-                                                    <FiChevronRight className="w-5 h-5" />
-                                                )}
-                                            </button>
-
-                                            {/* Subcategories */}
-                                            {expandedCategory === item.id && (
-                                                <div className="ml-4 mt-2 space-y-1">
-                                                    <Link
-                                                        href={item.href}
-                                                        onClick={onClose}
-                                                        className="block px-4 py-2 text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+                                            {item.children && item.children.length > 0 ? (
+                                                // Expandable Item
+                                                <>
+                                                    <button
+                                                        onClick={() => toggleCategory(item.id)}
+                                                        className="w-full flex items-center justify-between px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-lg font-medium transition-colors"
                                                     >
-                                                        View All {item.label}
-                                                    </Link>
-                                                    {/* Add more subcategories here */}
-                                                </div>
+                                                        <span>{item.label}</span>
+                                                        {expandedCategory === item.id ? (
+                                                            <FiChevronDown className="w-5 h-5" />
+                                                        ) : (
+                                                            <FiChevronRight className="w-5 h-5" />
+                                                        )}
+                                                    </button>
+
+                                                    {/* Submenu */}
+                                                    {expandedCategory === item.id && (
+                                                        <div className="ml-4 mt-2 space-y-1 border-l-2 border-primary-100 pl-2">
+                                                            {/* View Parent Link */}
+                                                            <Link
+                                                                href={item.href}
+                                                                onClick={onClose}
+                                                                className="block px-4 py-2 text-sm font-semibold text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+                                                            >
+                                                                View All {item.label}
+                                                            </Link>
+
+                                                            {/* Children */}
+                                                            {item.children.map((child) => (
+                                                                <Link
+                                                                    key={child.id}
+                                                                    href={child.href}
+                                                                    onClick={onClose}
+                                                                    className="block px-4 py-2 text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+                                                                >
+                                                                    {child.label}
+                                                                </Link>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                </>
+                                            ) : (
+                                                // Direct Link
+                                                <Link
+                                                    href={item.href}
+                                                    onClick={onClose}
+                                                    className="block px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-lg font-medium transition-colors"
+                                                >
+                                                    {item.label}
+                                                </Link>
                                             )}
                                         </div>
                                     ))}
 
-                                    {/* Additional Links */}
-                                    <div className="pt-4 mt-4 border-t border-gray-200 space-y-2">
-                                        <Link
-                                            href="/about"
-                                            onClick={onClose}
-                                            className="block px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-lg font-medium transition-colors"
-                                        >
-                                            About Us
-                                        </Link>
-                                        <Link
-                                            href="/contact"
-                                            onClick={onClose}
-                                            className="block px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-lg font-medium transition-colors"
-                                        >
-                                            Contact
-                                        </Link>
-                                    </div>
+                                    {/* Additional Links section removed as items are now dynamic */}
                                 </nav>
                             </div>
 
