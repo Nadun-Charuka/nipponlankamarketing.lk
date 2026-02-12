@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, CheckCircle, FileText, CreditCard, Calendar } from 'lucide-react';
+import { X, CheckCircle, FileText, CreditCard, Calendar, Truck } from 'lucide-react';
 
 export function WelcomePopup() {
     const [isOpen, setIsOpen] = useState(false);
@@ -35,7 +35,7 @@ export function WelcomePopup() {
         {
             icon: CreditCard,
             title: 'Small Downpayment',
-            subtitle: 'අඩු මූලික ගෙවීම',
+            subtitle: 'අවම මූලික ගෙවීම',
             color: 'bg-purple-100 text-purple-600',
         },
         {
@@ -43,6 +43,12 @@ export function WelcomePopup() {
             title: 'Flexible Installments',
             subtitle: 'පහසු වාරික',
             color: 'bg-pink-100 text-pink-600',
+        },
+        {
+            icon: Truck,
+            title: 'Free Delivery',
+            subtitle: 'බස්නාහිර පළාතට නොමිලේ',
+            color: 'bg-green-100 text-green-600',
         },
     ];
 
@@ -71,12 +77,6 @@ export function WelcomePopup() {
                         {/* Header / Banner */}
                         <div className="bg-gradient-to-r from-purple-600 to-pink-600 p-6 text-center relative overflow-hidden">
                             <div className="absolute top-0 left-0 w-full h-full bg-white/10 opacity-30 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] mix-blend-overlay" />
-                            <button
-                                onClick={handleClose}
-                                className="absolute top-4 right-4 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-full p-1 transition-colors"
-                            >
-                                <X className="w-5 h-5" />
-                            </button>
 
                             <h2 className="text-2xl font-bold text-white mb-1 relative z-10">Welcome to Nippon Lanka!</h2>
                             <p className="text-white/90 text-sm relative z-10">Experience the difference</p>

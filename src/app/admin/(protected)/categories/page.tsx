@@ -22,6 +22,7 @@ export default function CategoriesPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [reorderingId, setReorderingId] = useState<string | null>(null);
     const [deletingId, setDeletingId] = useState<string | null>(null);
+    const [togglingId, setTogglingId] = useState<string | null>(null);
 
     const fetchCategories = async () => {
         setIsLoading(true);
@@ -109,6 +110,76 @@ export default function CategoriesPage() {
         }
     };
 
+    const handleToggleActive = async (category: Category) => {
+        if (togglingId) return;
+
+        // If turning ON, check limit
+        if (!category.is_active) {
+            const activeCount = categories.filter(c => c.is_active).length;
+            if (activeCount >= 9) {
+                toast.error('Maximum 9 categories can be active in Navbar');
+                return;
+            }
+        }
+
+        setTogglingId(category.id);
+
+        try {
+            const { error } = await supabase
+                .from('categories')
+                .update({ is_active: !category.is_active })
+                .eq('id', category.id);
+
+            if (error) throw error;
+
+            // Update local state
+            setCategories(categories.map(c =>
+                c.id === category.id ? { ...c, is_active: !c.is_active } : c
+            ));
+
+            toast.success(`Category ${!category.is_active ? 'activated' : 'deactivated'}`);
+        } catch (error) {
+            console.error(error);
+            toast.error('Failed to update status');
+        } finally {
+            setTogglingId(null);
+        }
+    };
+
+    const handleFixOrder = async () => {
+        if (!confirm('This will re-order all categories sequentially starting from 1 based on their current position. Continue?')) {
+            return;
+        }
+
+        setIsLoading(true);
+
+        try {
+            // Create updates with sequential order
+            const updates = categories.map((cat, index) => ({
+                id: cat.id,
+                name: cat.name,
+                slug: cat.slug,
+                // We must include other required fields for upsert if we don't want to lose them or if RLS/constraints require them
+                // But generally partial update via upsert works if ID matches
+                display_order: index + 1,
+            }));
+
+            // Supabase upsert to update multiple rows
+            const { error } = await supabase
+                .from('categories')
+                .upsert(updates, { onConflict: 'id' });
+
+            if (error) throw error;
+
+            toast.success('Category order fixed successfully');
+            fetchCategories();
+        } catch (error) {
+            console.error('Error fixing order:', error);
+            toast.error('Failed to fix order');
+            setIsLoading(false);
+        }
+    };
+
     if (isLoading) {
         return (
             <div className="flex items-center justify-center min-h-screen">
@@ -124,13 +195,22 @@ export default function CategoriesPage() {
                     <h1 className="text-3xl font-bold text-gray-900">Categories</h1>
                     <p className="text-gray-600 mt-1">Manage product categories and navbar display</p>
                 </div>
-                <Link
-                    href="/admin/categories/new"
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-                >
-                    <FiPlus className="w-5 h-5" />
-                    Add Category
-                </Link>
+                <div className="flex gap-2">
+                    <button
+                        onClick={handleFixOrder}
+                        className="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 bg-white rounded-lg hover:bg-gray-50 transition-colors"
+                        title="Reset display order numbers sequentially"
+                    >
+                        <span className="text-sm">Fix Order</span>
+                    </button>
+                    <Link
+                        href="/admin/categories/new"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                    >
+                        <FiPlus className="w-5 h-5" />
+                        Add Category
+                    </Link>
+                </div>
             </div>
 
             {/* Categories Table */}
@@ -206,12 +286,19 @@ export default function CategoriesPage() {
                                         <div className="text-sm text-gray-500">{category.slug}</div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${category.is_active
-                                            ? 'bg-green-100 text-green-800'
-                                            : 'bg-gray-100 text-gray-800'
-                                            }`}>
-                                            {category.is_active ? 'Active' : 'Inactive'}
-                                        </span>
+                                        <button
+                                            onClick={() => handleToggleActive(category)}
+                                            disabled={togglingId === category.id}
+                                            className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2 ${category.is_active ? 'bg-green-500' : 'bg-gray-200'
+                                                }`}
+                                        >
+                                            <span className="sr-only">Use setting</span>
+                                            <span
+                                                aria-hidden="true"
+                                                className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${category.is_active ? 'translate-x-5' : 'translate-x-0'
+                                                    }`}
+                                            />
+                                        </button>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <div className="flex items-center justify-end gap-2">

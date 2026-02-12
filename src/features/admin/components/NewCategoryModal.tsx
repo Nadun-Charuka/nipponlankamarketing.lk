@@ -44,6 +44,30 @@ export function NewCategoryModal({ show, onClose, onCategoryCreated }: NewCatego
                 return;
             }
 
+            // Check active limit
+            let isActive = true;
+            const { count, error: countError } = await supabase
+                .from('categories')
+                .select('*', { count: 'exact', head: true })
+                .eq('is_active', true);
+
+            if (countError) throw countError;
+
+            if (count && count >= 9) {
+                toast.error('Maximum 9 categories can be active. This category will be created as Inactive.');
+                isActive = false;
+            }
+
+            // Get max display_order
+            const { data: maxOrderData, error: maxOrderError } = await supabase
+                .from('categories')
+                .select('display_order')
+                .order('display_order', { ascending: false })
+                .limit(1)
+                .single();
+
+            const nextOrder = (maxOrderData?.display_order || 0) + 1;
+
             // Create new category with UUID
             const categoryId = crypto.randomUUID();
             const { data, error } = await supabase
@@ -52,8 +76,8 @@ export function NewCategoryModal({ show, onClose, onCategoryCreated }: NewCatego
                     id: categoryId,
                     name: categoryName,
                     slug: slug,
-                    display_order: 999, // Put new categories at the end
-                    is_active: true,
+                    display_order: nextOrder,
+                    is_active: isActive,
                     created_at: new Date().toISOString()
                 }])
                 .select()

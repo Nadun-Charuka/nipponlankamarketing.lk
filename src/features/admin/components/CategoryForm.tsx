@@ -73,6 +73,37 @@ export function CategoryForm({ categoryId }: CategoryFormProps) {
         setIsLoading(true);
 
         try {
+            // Check active limit if setting to active
+            if (formData.is_active) {
+                // If editing, exclude current category from count check (or just check count)
+                // Actually, if we are editing and it was already active, count won't change.
+                // If it was inactive and we make it active, count increases.
+                // Simplest is to check count of OTHER active categories.
+
+                let query = supabase
+                    .from('categories')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('is_active', true);
+
+                if (categoryId) {
+                    query = query.neq('id', categoryId);
+                }
+
+                const { count, error: countError } = await query;
+
+                if (countError) throw countError;
+
+                if (count && count >= 9) {
+                    toast.error('Maximum 9 categories can be active in Navbar');
+                    // We don't force it to false here, we just stop the save?
+                    // Or we let them save but as inactive?
+                    // User said "admin can only make active...". 
+                    // Better to stop save and ask user to uncheck or deactivate others first.
+                    setIsLoading(false);
+                    return;
+                }
+            }
+
             if (categoryId) {
                 // Update existing category
                 const { error } = await supabase
