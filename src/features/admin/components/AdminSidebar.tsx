@@ -1,6 +1,6 @@
 'use client';
-
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { FiHome, FiBox, FiShoppingBag, FiSettings, FiUsers, FiLogOut, FiGrid, FiImage, FiFileText } from 'react-icons/fi';
 import { useAdminAuth } from '../hooks/useAdminAuth';
@@ -22,15 +22,27 @@ export function AdminSidebar() {
         <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0 border-r border-gray-200 bg-white">
             {/* Logo */}
             <div className="flex items-center justify-between h-16 flex-shrink-0 px-6 border-b border-gray-100 bg-white">
-                <Link href="/admin" className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center transform rotate-3">
-                        <span className="text-white font-display font-bold text-xl transform -rotate-3">N</span>
+                {/* Logo */}
+                <Link href="/admin" className="flex flex-col justify-center flex-shrink-0 group">
+                    <div className="flex items-center gap-1">
+                        <div className="relative w-8 h-8 flex-shrink-0">
+                            <Image
+                                src="/logo.png"
+                                alt="Nippon Lanka Marketing"
+                                fill
+                                className="object-contain"
+                                priority
+                            />
+                        </div>
+                        <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600 animate-gradient-x leading-none">
+                            ippon Lanka
+                        </span>
                     </div>
-                    <div>
-                        <span className="font-display font-bold text-xl text-gray-900 leading-none block">Nippon</span>
-                        <span className="text-[10px] text-gray-500 uppercase tracking-widest font-medium">Admin Panel</span>
-                    </div>
+                    <span className="text-[10px] font-medium tracking-[0.2em] text-gray-500 uppercase overflow-hidden whitespace-nowrap pl-1">
+                        Marketing Admin
+                    </span>
                 </Link>
+
                 <Link
                     href="/"
                     target="_blank"

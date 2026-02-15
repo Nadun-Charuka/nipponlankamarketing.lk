@@ -185,7 +185,7 @@ function HeroSlideContent({ product }: { product: HeroProduct }) {
                     </motion.h2>
 
                     <motion.p variants={itemVariants} className="text-base text-gray-600 mb-6 font-medium leading-relaxed max-w-sm">
-                        Discover our {product.name}, crafted for excellence and designed to elevate your lifestyle.
+                        Discover our <span className="font-bold text-lg text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 inline-block transform hover:scale-105 transition-transform cursor-default">{product.name}</span>, crafted for excellence and designed to elevate your lifestyle.
                     </motion.p>
 
                     <motion.div variants={itemVariants} className="flex flex-col gap-3">

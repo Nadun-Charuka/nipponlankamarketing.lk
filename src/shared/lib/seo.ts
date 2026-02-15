@@ -10,10 +10,7 @@ export function generateProductSchema(product: Product, baseUrl: string) {
     name: product.name,
     description: product.description || `${product.name} available at Nippon Lanka Marketing with easy installment plans`,
     image: product.featured_image ? `${baseUrl}${product.featured_image}` : undefined,
-    brand: {
-      '@type': 'Brand',
-      name: product.brand || 'Various Brands',
-    },
+
     offers: {
       '@type': 'Offer',
       url: `${baseUrl}/products/${product.slug}`,
@@ -26,10 +23,10 @@ export function generateProductSchema(product: Product, baseUrl: string) {
         ? 'https://schema.org/PreOrder'
         : 'https://schema.org/OutOfStock',
       itemCondition: 'https://schema.org/NewCondition',
-      seller: {
-        '@type': 'Organization',
-        name: 'Nippon Lanka Marketing',
-      },
+    },
+    brand: {
+      '@type': 'Brand',
+      name: product.brand || 'Nippon Electronics',
     },
     sku: product.sku || product.id,
   };
@@ -62,7 +59,8 @@ export function generateLocalBusinessSchema() {
     '@type': 'LocalBusiness',
     '@id': baseUrl,
     name: 'Nippon Lanka Marketing',
-    description: 'Premium home appliances and furniture with easy in-house installment plans. No credit card required.',
+    alternateName: ['Nippon Lanka', 'Nippon Electronics'],
+    description: 'Premium home appliances (TV, Fridge, Washing Machine) and furniture (Sofa, Bed, Wardrobe) with easy in-house installment plans (warika gewim) in Sri Lanka. No credit card required.',
     url: baseUrl,
     telephone: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ? `+${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}` : undefined,
     priceRange: 'LKR',
@@ -97,7 +95,7 @@ export function generateLocalBusinessSchema() {
  */
 export function generateProductTitle(product: Product): string {
   const brand = product.brand ? `${product.brand} ` : '';
-  return `${brand}${product.name} - Price LKR ${product.cash_price.toLocaleString()} | Installments Available`;
+  return `${brand}${product.name} - Price in Sri Lanka LKR ${product.cash_price.toLocaleString()} | Easy Installments (Warika Gewim) by Nippon Lanka Marketing`;
 }
 
 /**
@@ -107,7 +105,7 @@ export function generateProductDescription(product: Product): string {
   const brand = product.brand ? `${product.brand} ` : '';
   const description = product.description || product.name;
   
-  return `Buy ${brand}${product.name} at LKR ${product.cash_price.toLocaleString()} with easy ${product.installment_months}-month installment plans. ${description}. Free delivery in Western Province. No credit card required.`;
+  return `Buy ${brand}${product.name} at best price in Sri Lanka LKR ${product.cash_price.toLocaleString()} from Nippon Lanka Marketing. Pay with easy ${product.installment_months}-month installment plans (warika gewim). ${description}. Free delivery (gedaratama genath denawa) in Western Province. Warranty included.`;
 }
 
 /**
@@ -121,5 +119,5 @@ export function generateCategoryTitle(categoryName: string): string {
  * Generate category page description
  */
 export function generateCategoryDescription(categoryName: string): string {
-  return `Shop ${categoryName.toLowerCase()} with easy installment plans in Sri Lanka. No credit card required. Free delivery in Colombo, Gampaha & Kalutara. Best prices guaranteed.`;
+  return `Shop ${categoryName.toLowerCase()} with easy installment plans (warika gewim) in Sri Lanka. No credit card required. Free delivery in Colombo, Gampaha & Kalutara. Best prices guaranteed by Nippon Lanka Marketing.`;
 }

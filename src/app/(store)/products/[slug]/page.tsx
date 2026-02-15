@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { createClient } from '@supabase/supabase-js';
-import { ProductGallery, ProductInfo, ProductTabs } from '@/features/product/components';
+import { ProductGallery, ProductInfo, ProductTabs, RelatedProducts } from '@/features/product/components';
 import { Product } from '@/shared/types/database';
 import {
     generateProductSchema,
@@ -150,6 +150,8 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                         </div>
                     </div>
                 </div>
+
+                <RelatedProducts categoryId={product.category_id} currentProductId={product.id} />
 
                 {/* Mobile Sticky Action Bar Removed as per request */}
             </main>

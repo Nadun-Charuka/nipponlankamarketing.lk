@@ -72,7 +72,7 @@ export function ProductCardMobile({ product, onAddToWishlist }: ProductCardMobil
             <div className="p-3">
                 {/* Brand */}
                 <div className="text-[10px] text-gray-400 font-medium uppercase tracking-wider mb-1">
-                    Samsung
+                    {product.brand}
                 </div>
 
                 {/* Title */}

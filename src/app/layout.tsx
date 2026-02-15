@@ -20,57 +20,53 @@ export const metadata: Metadata = {
     default: "Nippon Lanka Marketing - Home Appliances & Furniture on Easy Installments | Sri Lanka",
     template: "%s | Nippon Lanka Marketing",
   },
-  description: "Buy premium home appliances and furniture with easy in-house installments in Sri Lanka. No credit card required. Free delivery in Western Province (Colombo, Gampaha, Kalutara). TVs, refrigerators, washing machines, air conditioners at best prices.",
+  description: "Buy premium home appliances and furniture with easy in-house installments (warika gewim) in Sri Lanka. No credit card required. Free delivery (gedaratama genath denawa) in Western Province. Authorized dealer for Singer, Damro, LG, Samsung, Sony.",
   keywords: [
+    // Brand Keywords
+    "Nippon Lanka Marketing",
+    "Nippon Lanka",
+    "Nippon Electronics",
+    "Nippon Furniture",
+
+    // Sinhala Keywords
+    "අඩුවට ලී බඩු", // aduwata lee badu
+    "වාරික ගෙවීම්", // warika gewim
+    "පුටු", // putu
+    "ඇදන්", // aden
+    "රෙදි සෝදන යන්ත්‍ර", // washing machines
+    "ශීතකරණ", // refrigerators
+    "ගෘහ භාණ්ඩ", // furniture
+    "රූපවාහිනී", // TV
+
+    // Singlish & Price Specific Keywords
+    "aduwata lee badu",
+    "warika gewim",
+    "aduma warika",
+    "putu price in Sri Lanka",
+    "aden price in Sri Lanka",
+
+    // Product Specific Pricing
+    "washing machine price in Sri Lanka",
+    "fridge price in Sri Lanka",
+    "refrigerator price in Sri Lanka",
+    "TV price in Sri Lanka",
+    "LED TV price in Sri Lanka",
+    "air conditioner price in Sri Lanka",
+    "AC price in Sri Lanka",
+    "sofa set price in Sri Lanka",
+    "bedroom set price in Sri Lanka",
+    "dining table price in Sri Lanka",
+
     // General
     "home appliances Sri Lanka",
     "furniture installments Sri Lanka",
     "no credit card installments",
     "free delivery Colombo",
-    "Western Province delivery",
 
-    // TV Keywords
-    "TV price in Sri Lanka",
-    "television installment plans",
-    "Singer TV price",
-    "Samsung TV Sri Lanka",
-    "Sony TV installment",
-    "LG TV price Colombo",
-    "smart TV Sri Lanka",
-
-    // Refrigerator Keywords
-    "fridge price in Sri Lanka",
-    "refrigerator installment",
-    "LG refrigerator Sri Lanka",
-    "Samsung fridge price",
-    "double door fridge Colombo",
-
-    // Washing Machine Keywords
-    "washing machine price Sri Lanka",
-    "washing machine installment",
-    "front load washer Colombo",
-    "Abans washing machine",
-
-    // Air Conditioner Keywords
-    "air conditioner price Sri Lanka",
-    "AC installment plans",
-    "Panasonic AC Sri Lanka",
-    "inverter AC Colombo",
-
-    // Furniture Keywords
-    "furniture installments Colombo",
-    "sofa set price Sri Lanka",
-    "Damro furniture installment",
-
-    // Location-based
-    "home appliances Colombo",
-    "furniture Gampaha",
-    "appliances Kalutara",
-
-    // Payment & Service
-    "easy installment plans",
-    "low price home appliances",
-    "installment options Sri Lanka",
+    // Location
+    "home appliances Gampaha",
+    "furniture Kalutara",
+    "electronics Colombo"
   ],
   authors: [{ name: "Nippon Lanka Marketing" }],
   creator: "Nippon Lanka Marketing",
@@ -80,12 +76,12 @@ export const metadata: Metadata = {
     url: process.env.NEXT_PUBLIC_SITE_URL,
     siteName: "Nippon Lanka Marketing",
     title: "Nippon Lanka Marketing - Easy Installments on Home Appliances in Sri Lanka",
-    description: "Buy TVs, refrigerators, washing machines, air conditioners & furniture with easy in-house installments. No credit card needed. Free delivery in Colombo, Gampaha & Kalutara.",
+    description: "Buy TVs, refrigerators, washing machines, ACs & furniture with easy warika gewim (installments). No credit card needed. Free delivery in Colombo, Gampaha & Kalutara.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Nippon Lanka Marketing - Home Appliances Sri Lanka",
-    description: "Easy installments on TVs, fridges, washing machines & more. No credit card required. Free delivery in Western Province.",
+    title: "Nippon Lanka Marketing - Home Appliances & Furniture",
+    description: "Easy installments on TVs, fridges, washing machines & more. No credit card required. Call/WhatsApp for details.",
   },
   robots: {
     index: true,

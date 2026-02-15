@@ -12,6 +12,7 @@ export default function AdminProductsPage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [categoryFilter, setCategoryFilter] = useState('');
     const [statusFilter, setStatusFilter] = useState('');
+    const [typeFilter, setTypeFilter] = useState<'featured' | 'new_arrival' | ''>('');
     const [products, setProducts] = useState<Product[]>([]);
     const [categories, setCategories] = useState<Array<{ id: string; name: string }>>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -64,8 +65,9 @@ export default function AdminProductsPage() {
 
         const matchesCategory = !categoryFilter || p.category_id === categoryFilter;
         const matchesStatus = !statusFilter || p.stock_status === statusFilter;
+        const matchesType = !typeFilter || (typeFilter === 'featured' ? p.is_featured : typeFilter === 'new_arrival' ? p.is_new : true);
 
-        return matchesSearch && matchesCategory && matchesStatus;
+        return matchesSearch && matchesCategory && matchesStatus && matchesType;
     });
 
     return (
@@ -106,7 +108,22 @@ export default function AdminProductsPage() {
                 </div>
                 <div className="flex gap-3">
                     <select
-                        className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-lg"
+                        className={`block w-auto min-w-[150px] pl-3 pr-10 py-2 text-base focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-lg cursor-pointer ${typeFilter
+                                ? 'bg-purple-50 border-purple-500 text-purple-700 font-medium'
+                                : 'bg-white border-gray-300 text-gray-700'
+                            }`}
+                        value={typeFilter}
+                        onChange={(e) => setTypeFilter(e.target.value as any)}
+                    >
+                        <option value="">All Types</option>
+                        <option value="featured">Featured</option>
+                        <option value="new_arrival">New Arrival</option>
+                    </select>
+                    <select
+                        className={`block w-auto min-w-[180px] pl-3 pr-10 py-2 text-base focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-lg cursor-pointer ${categoryFilter
+                                ? 'bg-purple-50 border-purple-500 text-purple-700 font-medium'
+                                : 'bg-white border-gray-300 text-gray-700'
+                            }`}
                         value={categoryFilter}
                         onChange={(e) => setCategoryFilter(e.target.value)}
                     >
@@ -116,7 +133,10 @@ export default function AdminProductsPage() {
                         ))}
                     </select>
                     <select
-                        className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-lg"
+                        className={`block w-auto min-w-[150px] pl-3 pr-10 py-2 text-base focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-lg cursor-pointer ${statusFilter
+                                ? 'bg-purple-50 border-purple-500 text-purple-700 font-medium'
+                                : 'bg-white border-gray-300 text-gray-700'
+                            }`}
                         value={statusFilter}
                         onChange={(e) => setStatusFilter(e.target.value)}
                     >
